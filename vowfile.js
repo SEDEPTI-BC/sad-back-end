@@ -11,11 +11,11 @@
 */
 
 // Uncomment when want to run migrations
-// const ace = require('@adonisjs/ace')
+const ace = require('@adonisjs/ace')
 
 module.exports = (cli, runner) => {
-  runner.before(async () => {
-    /*
+    runner.before(async () => {
+        /*
     |--------------------------------------------------------------------------
     | Start the server
     |--------------------------------------------------------------------------
@@ -24,9 +24,9 @@ module.exports = (cli, runner) => {
     | line, if http server is not required
     |
     */
-    use('Adonis/Src/Server').listen(process.env.HOST, process.env.PORT)
+        use('Adonis/Src/Server').listen(process.env.HOST, process.env.PORT)
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Run migrations
     |--------------------------------------------------------------------------
@@ -34,11 +34,11 @@ module.exports = (cli, runner) => {
     | Migrate the database before starting the tests.
     |
     */
-    // await ace.call('migration:run', {}, { silent: true })
-  })
+        await ace.call('migration:run', {}, { silent: true })
+    })
 
-  runner.after(async () => {
-    /*
+    runner.after(async () => {
+        /*
     |--------------------------------------------------------------------------
     | Shutdown server
     |--------------------------------------------------------------------------
@@ -46,9 +46,11 @@ module.exports = (cli, runner) => {
     | Shutdown the HTTP server when all tests have been executed.
     |
     */
-    use('Adonis/Src/Server').getInstance().close()
+        use('Adonis/Src/Server')
+            .getInstance()
+            .close()
 
-    /*
+        /*
     |--------------------------------------------------------------------------
     | Rollback migrations
     |--------------------------------------------------------------------------
@@ -57,6 +59,6 @@ module.exports = (cli, runner) => {
     | original state
     |
     */
-    // await ace.call('migration:reset', {}, { silent: true })
-  })
+        await ace.call('migration:reset', {}, { silent: true })
+    })
 }
