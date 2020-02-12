@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Event extends Model {
+  url() {
+    return `events/${this.id}`
+  }
 }
 
 module.exports = Event

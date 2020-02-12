@@ -16,4 +16,4 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.post('/events', 'EventController.store')
+Route.resource('events', 'EventController').only(['store', 'destroy'])

@@ -94,7 +94,10 @@ class EventController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy({ params, request, response }) {}
+  async destroy({ params, request, response }) {
+    const event = await Event.findOrFail(params.id)
+    await event.delete()
+  }
 }
 
 module.exports = EventController
