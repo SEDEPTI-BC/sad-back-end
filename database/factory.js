@@ -30,3 +30,9 @@ Factory.blueprint('App/Models/Event', faker => {
     end: '2020-02-10 10:51:16',
   }
 })
+
+Factory.blueprint('App/Models/Equipment', faker => {
+  return {
+    name: faker.name(),
+  }
+})
