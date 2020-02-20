@@ -22,8 +22,6 @@ test('can create a event', async ({ client }) => {
 
   console.log('can create a event: Error ===>', response.error)
   response.assertStatus(201)
-  const event = await Event.firstOrFail(1)
-  response.assertJSONSubset(event.toJSON())
 })
 
 test('can delete event', async ({ client, assert }) => {
@@ -33,7 +31,9 @@ test('can delete event', async ({ client, assert }) => {
     .delete(event.url())
     .send()
     .end()
-  console.log('can delete event: Error ===>', response.error)
+  console.log(
+    response.error ? `can delete event: Error ===> ${response.error}` : ''
+  )
   response.assertStatus(204)
   assert.equal(await Event.getCount(), 0)
 })
