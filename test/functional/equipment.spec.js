@@ -5,9 +5,23 @@ const Equipment = use('App/Models/Equipment')
 const Factory = use('Factory')
 
 trait('Test/ApiClient')
+trait('Auth/Client')
 trait('DatabaseTransactions')
 
-test('can create a equipment', async ({ client }) => {
+test('authorized user can create a equipment', async ({ client }) => {
+  const user = await Factory.model('App/Models/User').create()
+  const attributes = {
+    name: 'teste',
+  }
+  const response = await client
+    .post('/equipments')
+    .send(attributes)
+    .loginVia(user)
+    .end()
+  response.assertStatus(200)
+})
+
+test('unauthorized user cannot create a equipment', async ({ client }) => {
   const response = await client
     .post('/equipments')
     .send({
@@ -15,22 +29,30 @@ test('can create a equipment', async ({ client }) => {
     })
     .end()
 
-  console.log(
-    response.error ? `can create a equipment: Error ===> ${response.error}` : ''
-  )
-  response.assertStatus(201)
+  response.assertStatus(401)
 })
 
-test('can delete equipment', async ({ client, assert }) => {
+test('authorized user can delete equipment', async ({ client, assert }) => {
   const equipment = await Factory.model('App/Models/Equipment').create()
+  const user = await Factory.model('App/Models/User').create()
+  const response = await client
+    .delete(equipment.url())
+    .send()
+    .loginVia(user)
+    .end()
+  response.assertStatus(204)
+  assert.equal(await Equipment.getCount(), 0)
+})
 
+test('unauthorized user cannot  delete equipment', async ({
+  client,
+  assert,
+}) => {
+  const equipment = await Factory.model('App/Models/Equipment').create()
   const response = await client
     .delete(equipment.url())
     .send()
     .end()
-  console.log(
-    response.error ? `can delete equipment: Error ===> ${response.error}` : ''
-  )
-  response.assertStatus(204)
-  assert.equal(await Equipment.getCount(), 0)
+  assert.equal(await Equipment.getCount(), 1)
+  response.assertStatus(401)
 })

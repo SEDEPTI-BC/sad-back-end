@@ -39,9 +39,10 @@ class EquipmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
-    const equipment = await Equipment.create({ ...request.only(['name']) })
-    return response.created(equipment)
+  async store({ request, auth, response }) {
+    const attributes = { ...request.only(['name']) }
+    const equipment = await Equipment.create(attributes)
+    return response.json({ equipment })
   }
 
   /**
