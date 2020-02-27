@@ -19,8 +19,6 @@ test('can create a event', async ({ client }) => {
       end: '2020-02-02 00:00:00',
     })
     .end()
-
-  console.log('can create a event: Error ===>', response.error)
   response.assertStatus(201)
 })
 
@@ -31,9 +29,6 @@ test('can delete event', async ({ client, assert }) => {
     .delete(event.url())
     .send()
     .end()
-  console.log(
-    response.error ? `can delete event: Error ===> ${response.error}` : ''
-  )
   response.assertStatus(204)
   assert.equal(await Event.getCount(), 0)
 })

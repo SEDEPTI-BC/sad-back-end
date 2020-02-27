@@ -28,7 +28,6 @@ test('unauthorized user cannot create a equipment', async ({ client }) => {
       name: 'teste',
     })
     .end()
-
   response.assertStatus(401)
 })
 
