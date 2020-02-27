@@ -18,5 +18,5 @@ const Route = use('Route')
 
 Route.resource('events', 'EventController').only(['store', 'destroy'])
 Route.resource('equipments', 'EquipmentController')
-  .only(['store', 'destroy'])
+  .only(['store', 'destroy', 'update'])
   .middleware('auth')

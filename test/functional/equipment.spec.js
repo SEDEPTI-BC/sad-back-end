@@ -21,12 +21,37 @@ test('authorized user can create a equipment', async ({ client }) => {
   response.assertStatus(200)
 })
 
-test('unauthorized user cannot create a equipment', async ({ client }) => {
+test('unauthorized user can not create a equipment', async ({ client }) => {
   const response = await client
     .post('/equipments')
     .send({
       name: 'teste',
     })
+    .end()
+  response.assertStatus(401)
+})
+
+test('authorized user can update a equipment', async ({ client, assert }) => {
+  const user = await Factory.model('App/Models/User').create()
+  const equipment = await Factory.model('App/Models/Equipment').create()
+  const attributes = { name: 'new equipment' }
+  const response = await client
+    .put(equipment.url())
+    .loginVia(user)
+    .send(attributes)
+    .end()
+  response.assertStatus(200)
+})
+
+test('unauthorized user can not update a equipment', async ({
+  client,
+  assert,
+}) => {
+  const equipment = await Factory.model('App/Models/Equipment').create()
+  const attributes = { name: 'new equipment' }
+  const response = await client
+    .put(equipment.url())
+    .send(attributes)
     .end()
   response.assertStatus(401)
 })
@@ -43,7 +68,7 @@ test('authorized user can delete equipment', async ({ client, assert }) => {
   assert.equal(await Equipment.getCount(), 0)
 })
 
-test('unauthorized user cannot  delete equipment', async ({
+test('unauthorized user can not  delete equipment', async ({
   client,
   assert,
 }) => {

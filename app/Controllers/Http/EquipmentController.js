@@ -75,7 +75,12 @@ class EquipmentController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    const equipment = await Equipment.findOrFail(params.id)
+    equipment.merge(request.only(['name']))
+    equipment.save()
+    return response.json({ equipment })
+  }
 
   /**
    * Delete a equipment with id.
