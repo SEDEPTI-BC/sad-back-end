@@ -21,5 +21,5 @@ Route.post('/login', 'AuthController.login')
 
 Route.resource('events', 'EventController').only(['store', 'destroy'])
 Route.resource('equipments', 'EquipmentController')
-  .only(['store', 'destroy', 'update'])
+  .only(['index', 'store', 'destroy', 'update'])
   .middleware('auth')
