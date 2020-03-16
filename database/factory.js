@@ -35,6 +35,6 @@ Factory.blueprint('App/Models/Event', faker => {
 
 Factory.blueprint('App/Models/Equipment', faker => {
   return {
-    name: faker.name(),
+    name: faker.word(),
   }
 })
