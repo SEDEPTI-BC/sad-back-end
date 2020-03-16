@@ -65,7 +65,6 @@ test('authorized user can delete equipment', async ({ client, assert }) => {
     .loginVia(user)
     .end()
   response.assertStatus(204)
-  assert.equal(await Equipment.getCount(), 0)
 })
 
 test('unauthorized user can not  delete equipment', async ({
@@ -77,6 +76,26 @@ test('unauthorized user can not  delete equipment', async ({
     .delete(equipment.url())
     .send()
     .end()
-  assert.equal(await Equipment.getCount(), 1)
+  response.assertStatus(401)
+})
+
+test('authorized user can view equipments', async ({ client, assert }) => {
+  const user = await Factory.model('App/Models/User').create()
+  const response = await client
+    .get('/equipments')
+    .send()
+    .loginVia(user)
+    .end()
+  response.assertStatus(200)
+})
+
+test('unauthorized user can not view equipments', async ({
+  client,
+  assert,
+}) => {
+  const response = await client
+    .get('/equipments')
+    .send()
+    .end()
   response.assertStatus(401)
 })
