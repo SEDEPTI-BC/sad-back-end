@@ -16,7 +16,7 @@ test('authorized user can create a equipment', async ({ client }) => {
   const response = await client
     .post('/equipments')
     .send(attributes)
-    .loginVia(user)
+    .loginVia(user, 'jwt')
     .end()
   response.assertStatus(200)
 })
@@ -36,8 +36,9 @@ test('authorized user can view equipments', async ({ client, assert }) => {
   const response = await client
     .get('/equipments')
     .send()
-    .loginVia(user)
+    .loginVia(user, 'jwt')
     .end()
+
   response.assertStatus(200)
 })
 
@@ -58,7 +59,7 @@ test('authorized user can update a equipment', async ({ client, assert }) => {
   const attributes = { name: 'new equipment' }
   const response = await client
     .put(equipment.url())
-    .loginVia(user)
+    .loginVia(user, 'jwt')
     .send(attributes)
     .end()
   response.assertStatus(200)
@@ -83,7 +84,7 @@ test('authorized user can delete equipment', async ({ client, assert }) => {
   const response = await client
     .delete(equipment.url())
     .send()
-    .loginVia(user)
+    .loginVia(user, 'jwt')
     .end()
   response.assertStatus(204)
 })

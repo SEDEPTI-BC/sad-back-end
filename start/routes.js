@@ -19,7 +19,10 @@ const Route = use('Route')
 Route.post('/register', 'AuthController.register').middleware('auth')
 Route.post('/login', 'AuthController.login')
 
-Route.resource('events', 'EventController').only(['store', 'destroy'])
 Route.resource('equipments', 'EquipmentController')
+  .only(['index', 'store', 'destroy', 'update'])
+  .middleware('auth')
+
+Route.resource('events', 'EventController')
   .only(['index', 'store', 'destroy', 'update'])
   .middleware('auth')
