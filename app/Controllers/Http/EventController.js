@@ -31,7 +31,14 @@ class EventController {
     return response.created(event)
   }
 
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    const event = await Event.findOrFail(params.id)
+    event.merge(
+      request.only(['owner', 'email', 'title', 'description', 'start', 'end'])
+    )
+    event.save()
+    return response.json({ event })
+  }
 
   async destroy({ params, request, response }) {
     const event = await Event.findOrFail(params.id)
