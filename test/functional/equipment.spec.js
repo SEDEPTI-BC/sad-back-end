@@ -38,7 +38,6 @@ test('authorized user can view equipments', async ({ client, assert }) => {
     .send()
     .loginVia(user, 'jwt')
     .end()
-  console.log(response)
 
   response.assertStatus(200)
 })
