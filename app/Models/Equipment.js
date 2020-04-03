@@ -7,6 +7,10 @@ class Equipment extends Model {
   url() {
     return `equipments/${this.id}`
   }
+
+  events() {
+    this.belongsToMany('App/Models/Event')
+  }
 }
 
 module.exports = Equipment
