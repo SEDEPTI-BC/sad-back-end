@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Event = use('App/Models/Event')
+const Equipment = use('App/Models/Equipment')
 
 /**
  * Resourceful controller for interacting with events
@@ -28,7 +29,15 @@ class EventController {
         'end',
       ]),
     })
-    return response.created(event)
+
+    const { equipments: selectedEquipments } = request.post()
+    const equipment = await Equipment.findBy('name', selectedEquipments[0])
+    await event.equipments().attach(equipment.id)
+
+    return response.status(201).json({
+      message: 'Evento criado com sucesso!',
+      data: event,
+    })
   }
 
   async update({ params, request, response }) {
