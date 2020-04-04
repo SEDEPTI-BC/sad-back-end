@@ -55,7 +55,6 @@ class EventController {
     )
 
     if (equipments) {
-      const old = event.equipments().fetch()
       await event.equipments().detach()
       equipments.forEach(async (selected) => {
         const equipment = await Equipment.findBy('name', selected)
