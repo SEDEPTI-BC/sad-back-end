@@ -9,7 +9,7 @@ class Equipment extends Model {
   }
 
   events() {
-    this.belongsToMany('App/Models/Event')
+    this.belongsToMany('App/Models/Event').pivotTable('equipment_event')
   }
 }
 
