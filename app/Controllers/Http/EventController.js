@@ -5,6 +5,7 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Event = use('App/Models/Event')
+const Equipment = use('App/Models/Equipment')
 
 /**
  * Resourceful controller for interacting with events
@@ -18,6 +19,8 @@ class EventController {
   }
 
   async store({ request, response }) {
+    const { equipments } = request.post()
+
     const event = await Event.create({
       ...request.only([
         'owner',
@@ -28,21 +31,50 @@ class EventController {
         'end',
       ]),
     })
-    return response.created(event)
+
+    if (equipments) {
+      equipments.forEach(async (selected) => {
+        const equipment = await Equipment.findBy('name', selected)
+        await event.equipments().attach([equipment.id])
+      })
+    }
+
+    return response.status(201).json({
+      message: 'Evento criado com sucesso!',
+      data: event,
+    })
   }
 
   async update({ params, request, response }) {
+    const { equipments } = request.post()
+
     const event = await Event.findOrFail(params.id)
-    event.merge(
+
+    await event.merge(
       request.only(['owner', 'email', 'title', 'description', 'start', 'end'])
     )
+
+    if (equipments) {
+      await event.equipments().detach()
+      equipments.forEach(async (selected) => {
+        const equipment = await Equipment.findBy('name', selected)
+        await event.equipments().attach([equipment.id])
+      })
+    }
     event.save()
-    return response.json({ event })
+    return response.status(200).json({
+      message: 'Evento atualizado com sucesso!',
+      data: event,
+    })
   }
 
   async destroy({ params, request, response }) {
     const event = await Event.findOrFail(params.id)
     await event.delete()
+
+    return response.status(204).json({
+      message: 'Evento deletado com sucesso!',
+    })
   }
 }
 

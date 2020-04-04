@@ -7,6 +7,12 @@ class Event extends Model {
   url() {
     return `events/${this.id}`
   }
+
+  equipments() {
+    return this.belongsToMany('App/Models/Equipment').pivotTable(
+      'equipment_event'
+    )
+  }
 }
 
 module.exports = Event

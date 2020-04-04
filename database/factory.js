@@ -29,7 +29,7 @@ Factory.blueprint('App/Models/Event', faker => {
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
     start: '2020-02-10 10:51:16',
-    end: '2020-02-10 10:51:16',
+    end: '2020-02-10 12:51:16',
   }
 })
 
