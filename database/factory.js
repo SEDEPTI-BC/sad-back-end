@@ -14,7 +14,7 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
 
-Factory.blueprint('App/Models/User', faker => {
+Factory.blueprint('App/Models/User', (faker) => {
   return {
     username: faker.username(),
     email: faker.email(),
@@ -22,7 +22,7 @@ Factory.blueprint('App/Models/User', faker => {
   }
 })
 
-Factory.blueprint('App/Models/Event', faker => {
+Factory.blueprint('App/Models/Event', (faker) => {
   return {
     owner: faker.name(),
     email: faker.email({ domain: 'gmail.com' }),
@@ -33,8 +33,17 @@ Factory.blueprint('App/Models/Event', faker => {
   }
 })
 
-Factory.blueprint('App/Models/Equipment', faker => {
+Factory.blueprint('App/Models/Equipment', (faker) => {
   return {
     name: faker.word(),
   }
 })
+
+// Factory.blueprint('App/Models/DisableDay', (faker) => {
+//   return {
+//     title: faker.word(),
+//     description: faker.sentence({ words: 10 }),
+//     start: '2020-03-12 08:00:00',
+//     end: '2020-04-13 08:00:00',
+//   }
+// })
