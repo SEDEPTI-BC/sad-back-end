@@ -26,3 +26,8 @@ Route.resource('equipments', 'EquipmentController')
 Route.resource('events', 'EventController')
   .only(['index', 'store', 'destroy', 'update'])
   .middleware('auth')
+
+Route.resource('disable_days', 'DisableDayController')
+  .only(['store', 'destroy', 'update'])
+  .middleware('auth')
+Route.get('/disable_days', 'DisableDayController.index')
