@@ -1,5 +1,7 @@
 'use strict'
 const User = use('App/Models/User')
+/** @type {import('@adonisjs/framework/src/Hash')} */
+const Hash = use('Hash')
 
 class AuthController {
   async register({ request, auth, response }) {
@@ -27,6 +29,31 @@ class AuthController {
       console.log(e)
       return response.json({ message: 'You are not registered!' })
     }
+  }
+
+  async update({ request, response, auth }) {
+    const user = auth.current.user
+
+    const verifyPassword = await Hash.verify(
+      request.input('currentPassword'),
+      user.password
+    )
+
+    if (!verifyPassword) {
+      return response.status(400).json({
+        status: 'error',
+        message:
+          'Não foi possível verificar a senha atual! Por favor, tente novamente',
+      })
+    }
+    user.merge(request.only(['username', 'email']))
+    user.password = request.input('newPassword')
+
+    await user.save()
+
+    return response.status(200).json({
+      message: 'atualizado com sucesso',
+    })
   }
 }
 
