@@ -18,6 +18,7 @@ const Route = use('Route')
 
 Route.post('/register', 'AuthController.register').middleware('auth')
 Route.post('/login', 'AuthController.login')
+Route.put('/user', 'AuthController.update').middleware('auth')
 
 Route.resource('equipments', 'EquipmentController')
   .only(['index', 'store', 'destroy', 'update'])
