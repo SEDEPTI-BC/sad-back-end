@@ -26,7 +26,7 @@ test('authorized user can create a event', async ({ client }) => {
 
 test('unauthorized user can not create a event', async ({ client }) => {
   const user = await Factory.model('App/Models/User').create()
-  user.delete()
+  await user.delete()
   const response = await client
     .post('/events')
     .send({
@@ -45,18 +45,14 @@ test('unauthorized user can not create a event', async ({ client }) => {
 test('authorized user can view events', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   await Factory.model('App/Models/Event').create()
-  const response = await client
-    .get('/events')
-    .send()
-    .loginVia(user)
-    .end()
+  const response = await client.get('/events').send().loginVia(user).end()
   response.assertStatus(200)
 })
 
 test('unauthorized user can not view events', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   await Factory.model('App/Models/Event').create()
-  user.delete()
+  await user.delete()
   const response = await client
     .get('/events')
     .send()
@@ -82,7 +78,7 @@ test('authorized user can update a event', async ({ client, assert }) => {
 test('unauthorized user can not update a event', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   const event = await Factory.model('App/Models/Event').create()
-  user.delete()
+  await user.delete()
   const attributes = {
     owner: 'teste2',
   }
@@ -109,7 +105,7 @@ test('authorized user can delete event', async ({ client, assert }) => {
 test('unauthorized user can not delete event', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   const event = await Factory.model('App/Models/Event').create()
-  user.delete()
+  await user.delete()
   const response = await client
     .delete(event.url())
     .send()
