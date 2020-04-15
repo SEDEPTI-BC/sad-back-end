@@ -2,6 +2,7 @@
 
 const { test, trait } = use('Test/Suite')('Event')
 const Factory = use('Factory')
+const Database = use('Database')
 
 trait('Test/ApiClient')
 trait('Auth/Client')
@@ -9,6 +10,11 @@ trait('DatabaseTransactions')
 
 test('authorized user can create a event', async ({ client }) => {
   const user = await Factory.model('App/Models/User').create()
+  await Factory.model('App/Models/Equipment').createMany(3)
+
+  let equipments = await Database.select('name').from('equipment')
+  equipments = equipments.map((e) => (e = e.name))
+
   const response = await client
     .post('/events')
     .send({
@@ -18,15 +24,20 @@ test('authorized user can create a event', async ({ client }) => {
       description: 'teste',
       start: '2020-02-02 00:00:00',
       end: '2020-02-02 00:00:00',
+      equipments,
     })
     .loginVia(user, 'jwt')
     .end()
+
   response.assertStatus(201)
 })
 
 test('unauthorized user can not create a event', async ({ client }) => {
   const user = await Factory.model('App/Models/User').create()
   await user.delete()
+  let equipments = await Database.select('name').from('equipment')
+  equipments = equipments.map((e) => (e = e.name))
+
   const response = await client
     .post('/events')
     .send({
@@ -36,6 +47,7 @@ test('unauthorized user can not create a event', async ({ client }) => {
       description: 'teste',
       start: '2020-02-02 00:00:00',
       end: '2020-02-02 00:00:00',
+      equipments,
     })
     .loginVia(user, 'jwt')
     .end()
