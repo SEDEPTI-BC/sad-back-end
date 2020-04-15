@@ -57,3 +57,13 @@ Factory.blueprint('App/Models/DisableDay', async (faker) => {
     user_id: user.id,
   }
 })
+
+Factory.blueprint('equipment_event', async (faker) => {
+  const equipment = await Factory.model('App/Models/Equipment').create()
+  const event = await Factory.model('App/Models/Event').create()
+
+  return {
+    event_id: equipment.id,
+    equipment_id: event.id,
+  }
+})
