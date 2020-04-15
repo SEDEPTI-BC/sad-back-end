@@ -14,7 +14,9 @@ class EventController {
   async index({ request, response }) {
     let { page } = request.all()
     page = page ? page : 1
-    const events = await Event.query().paginate(page ? page : 1, 10)
+    const events = await Event.query()
+      .with('equipments')
+      .paginate(page ? page : 1, 10)
     return response.json({ events })
   }
 
