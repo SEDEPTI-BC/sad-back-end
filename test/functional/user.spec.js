@@ -40,13 +40,11 @@ test('authorized user can update their data', async ({ assert, client }) => {
     currentPassword: '123456',
     newPassword: 'abcde',
   }
-
   const response = await client
     .put('/user')
     .send(data)
     .loginVia(admin, 'jwt')
     .end()
-
   response.assertStatus(200)
 })
 
