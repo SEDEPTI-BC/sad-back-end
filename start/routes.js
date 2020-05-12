@@ -16,19 +16,22 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.post('/register', 'AuthController.register').middleware('auth')
-Route.post('/login', 'AuthController.login')
-Route.put('/user', 'AuthController.update').middleware('auth')
+Route.group(() => {
+  Route.post('/register', 'AuthController.register').middleware('auth:jwt')
+  Route.post('/login', 'AuthController.login')
+  Route.put('/user', 'AuthController.update').middleware(['auth:jwt'])
 
-Route.resource('equipments', 'EquipmentController')
-  .only(['index', 'store', 'destroy', 'update'])
-  .middleware('auth')
+  Route.resource('equipments', 'EquipmentController')
+    .only(['store', 'destroy', 'update'])
+    .middleware(['auth:jwt'])
+  Route.get('/equipments', 'EquipmentController.index')
 
-Route.resource('events', 'EventController')
-  .only(['index', 'store', 'destroy', 'update'])
-  .middleware('auth')
+  Route.resource('events', 'EventController')
+    .only(['index', 'store', 'destroy', 'update'])
+    .middleware('auth:jwt')
 
-Route.resource('disable_days', 'DisableDayController')
-  .only(['store', 'destroy', 'update'])
-  .middleware('auth')
-Route.get('/disable_days', 'DisableDayController.index')
+  Route.resource('disable_days', 'DisableDayController')
+    .only(['store', 'destroy', 'update'])
+    .middleware('auth:jwt')
+  Route.get('/disable_days', 'DisableDayController.index')
+}).prefix('/api/v1')
