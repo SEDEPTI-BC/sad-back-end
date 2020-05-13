@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Equipment extends Model {
   url() {
-    return `equipments/${this.id}`
+    return `/api/v1/equipments/${this.id}`
   }
 
   events() {

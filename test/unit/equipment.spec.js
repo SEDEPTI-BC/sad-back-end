@@ -7,5 +7,5 @@ trait('DatabaseTransactions')
 
 test('can access url', async ({ assert }) => {
   const equipment = await Factory.model('App/Models/Equipment').create()
-  assert.equal(equipment.url(), `equipments/${equipment.id}`)
+  assert.equal(equipment.url(), `/api/v1/equipments/${equipment.id}`)
 })

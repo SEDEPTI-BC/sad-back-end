@@ -14,7 +14,7 @@ test('authorized user can register a user', async ({ assert, client }) => {
   const data = { username: 'test', email: 'test', password: '123456' }
 
   const response = await client
-    .post('/register')
+    .post('/api/v1/register')
     .send(data)
     .loginVia(admin, 'jwt')
     .end()
@@ -27,7 +27,7 @@ test('unauthorized user can not register a user', async ({
   client,
 }) => {
   const data = { username: 'test', email: 'test', password: '123456' }
-  const response = await client.post('/register').send(data).end()
+  const response = await client.post('/api/v1/register').send(data).end()
 
   response.assertStatus(401)
 })
@@ -41,7 +41,7 @@ test('authorized user can update their data', async ({ assert, client }) => {
     newPassword: 'abcde',
   }
   const response = await client
-    .put('/user')
+    .put('/api/v1/user')
     .send(data)
     .loginVia(admin, 'jwt')
     .end()
@@ -64,10 +64,36 @@ test('unauthorized user can not update their data', async ({
   }
 
   const response = await client
-    .put('/user')
+    .put('/api/v1/user')
     .send(data)
     .loginVia(admin, 'jwt')
     .end()
 
+  response.assertStatus(401)
+})
+
+test('authorized user can get their user data', async ({ assert, client }) => {
+  const admin = await Factory.model('App/Models/User').create()
+
+  const response = await client
+    .get('/api/v1/me')
+    .send()
+    .loginVia(admin, 'jwt')
+    .end()
+  response.assertStatus(200)
+})
+
+test('authorized user can not get their user data', async ({
+  assert,
+  client,
+}) => {
+  const admin = await Factory.model('App/Models/User').create()
+  admin.delete()
+
+  const response = await client
+    .get('/api/v1/me')
+    .send()
+    .loginVia(admin, 'jwt')
+    .end()
   response.assertStatus(401)
 })
