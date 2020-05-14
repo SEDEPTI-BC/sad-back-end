@@ -14,7 +14,7 @@ test('authorized user can create a equipment', async ({ client }) => {
     name: 'teste',
   }
   const response = await client
-    .post('/equipments')
+    .post('/api/v1/equipments')
     .send(attributes)
     .loginVia(user, 'jwt')
     .end()
@@ -23,7 +23,7 @@ test('authorized user can create a equipment', async ({ client }) => {
 
 test('unauthorized user can not create a equipment', async ({ client }) => {
   const response = await client
-    .post('/equipments')
+    .post('/api/v1/equipments')
     .send({
       name: 'teste',
     })
@@ -34,7 +34,7 @@ test('unauthorized user can not create a equipment', async ({ client }) => {
 test('authorized user can view equipments', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   const response = await client
-    .get('/equipments')
+    .get('/api/v1/equipments')
     .send()
     .loginVia(user, 'jwt')
     .end()
@@ -42,15 +42,9 @@ test('authorized user can view equipments', async ({ client, assert }) => {
   response.assertStatus(200)
 })
 
-test('unauthorized user can not view equipments', async ({
-  client,
-  assert,
-}) => {
-  const response = await client
-    .get('/equipments')
-    .send()
-    .end()
-  response.assertStatus(401)
+test('unauthorized user can view equipments', async ({ client, assert }) => {
+  const response = await client.get('/api/v1/equipments').send().end()
+  response.assertStatus(200)
 })
 
 test('authorized user can update a equipment', async ({ client, assert }) => {
@@ -71,10 +65,7 @@ test('unauthorized user can not update a equipment', async ({
 }) => {
   const equipment = await Factory.model('App/Models/Equipment').create()
   const attributes = { name: 'new equipment' }
-  const response = await client
-    .put(equipment.url())
-    .send(attributes)
-    .end()
+  const response = await client.put(equipment.url()).send(attributes).end()
   response.assertStatus(401)
 })
 
@@ -94,9 +85,6 @@ test('unauthorized user can not  delete equipment', async ({
   assert,
 }) => {
   const equipment = await Factory.model('App/Models/Equipment').create()
-  const response = await client
-    .delete(equipment.url())
-    .send()
-    .end()
+  const response = await client.delete(equipment.url()).send().end()
   response.assertStatus(401)
 })

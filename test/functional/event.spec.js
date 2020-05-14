@@ -16,7 +16,7 @@ test('authorized user can create a event', async ({ client }) => {
   equipments = equipments.map((e) => (e = e.name))
 
   const response = await client
-    .post('/events')
+    .post('/api/v1/events')
     .send({
       owner: 'teste',
       title: 'teste',
@@ -39,7 +39,7 @@ test('unauthorized user can not create a event', async ({ client }) => {
   equipments = equipments.map((e) => (e = e.name))
 
   const response = await client
-    .post('/events')
+    .post('/api/v1/events')
     .send({
       owner: 'teste',
       title: 'teste',
@@ -57,7 +57,11 @@ test('unauthorized user can not create a event', async ({ client }) => {
 test('authorized user can view events', async ({ client, assert }) => {
   const user = await Factory.model('App/Models/User').create()
   await Factory.model('App/Models/Event').create()
-  const response = await client.get('/events').send().loginVia(user).end()
+  const response = await client
+    .get('/api/v1/events')
+    .send()
+    .loginVia(user)
+    .end()
   response.assertStatus(200)
 })
 
@@ -66,7 +70,7 @@ test('unauthorized user can not view events', async ({ client, assert }) => {
   await Factory.model('App/Models/Event').create()
   await user.delete()
   const response = await client
-    .get('/events')
+    .get('/api/v1/events')
     .send()
     .loginVia(user, 'jwt')
     .end()

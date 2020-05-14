@@ -6,5 +6,5 @@ trait('DatabaseTransactions')
 
 test('can access url', async ({ assert }) => {
   const event = await Factory.model('App/Models/Event').create()
-  assert.equal(event.url(), `events/${event.id}`)
+  assert.equal(event.url(), `/api/v1/events/${event.id}`)
 })

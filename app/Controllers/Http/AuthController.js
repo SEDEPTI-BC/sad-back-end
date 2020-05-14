@@ -4,6 +4,10 @@ const User = use('App/Models/User')
 const Hash = use('Hash')
 
 class AuthController {
+  async me({ auth }) {
+    return auth.getUser()
+  }
+
   async register({ request, auth, response }) {
     const user = await User.create(request.all())
 
@@ -21,13 +25,17 @@ class AuthController {
       if (await auth.attempt(email, password)) {
         const user = await User.findBy('email', email)
         const token = await auth.generate(user)
-
-        Object.assign(user, token)
-        return response.json(user)
+        return response.json({
+          data: token,
+          message: 'Login successfull',
+        })
       }
     } catch (e) {
       console.log(e)
-      return response.json({ message: 'You are not registered!' })
+      return response.json({
+        status: 'error',
+        message: 'Invalid email/password.',
+      })
     }
   }
 
