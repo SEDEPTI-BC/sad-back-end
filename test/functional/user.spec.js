@@ -83,7 +83,7 @@ test('authorized user can get their user data', async ({ assert, client }) => {
   response.assertStatus(200)
 })
 
-test('authorized user can not get their user data', async ({
+test('unauthorized user can not get their user data', async ({
   assert,
   client,
 }) => {
