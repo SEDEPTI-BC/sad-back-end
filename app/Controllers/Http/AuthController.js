@@ -5,7 +5,9 @@ const Hash = use('Hash')
 
 class AuthController {
   async me({ auth }) {
-    return auth.getUser()
+    return response.json({
+      data: auth.getUser(),
+    })
   }
 
   async register({ request, auth, response }) {
@@ -32,9 +34,9 @@ class AuthController {
       }
     } catch (e) {
       console.log(e)
-      return response.json({
+      return response.status(400).json({
         status: 'error',
-        message: 'Invalid email/password.',
+        message: 'Email/Senha inválidos.',
       })
     }
   }
