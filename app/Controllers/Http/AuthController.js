@@ -4,9 +4,10 @@ const User = use('App/Models/User')
 const Hash = use('Hash')
 
 class AuthController {
-  async me({ auth }) {
+  async me({ auth, response }) {
+    const user = await auth.getUser()
     return response.json({
-      data: auth.getUser(),
+      data: user,
     })
   }
 
