@@ -66,6 +66,20 @@ class AuthController {
       message: 'atualizado com sucesso',
     })
   }
+
+  async validate({ request, response, auth }) {
+    const { email, password } = request.all()
+    const token = await auth.attempt(email, password)
+
+    if (token) {
+      return response.json({
+        code: 'jwt_auth_valid_token',
+        data: {
+          token,
+        },
+      })
+    }
+  }
 }
 
 module.exports = AuthController
