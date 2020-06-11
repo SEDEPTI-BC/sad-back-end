@@ -57,8 +57,13 @@ class AuthController {
           'Não foi possível verificar a senha atual! Por favor, tente novamente',
       })
     }
+
     user.merge(request.only(['username', 'email']))
-    user.password = request.input('newPassword')
+
+    const newPassword = request.input('newPassword')
+    if (newPassword) {
+      user.password = newPassword
+    }
 
     await user.save()
 
