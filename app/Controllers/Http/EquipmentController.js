@@ -27,9 +27,12 @@ class EquipmentController {
     return response.json({ equipment })
   }
 
-  async destroy({ params }) {
+  async destroy({ params, response }) {
     const equipment = await Equipment.findOrFail(params.id)
     await equipment.delete()
+    return response.json({
+      message: 'Deletado com sucesso',
+    })
   }
 }
 
