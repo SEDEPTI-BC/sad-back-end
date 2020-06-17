@@ -12,8 +12,7 @@ const Equipment = use('App/Models/Equipment')
  */
 class EventController {
   async index({ request, response }) {
-    let { page, all } = request.all()
-    page = page ? page : 1
+    let { page, all, limit, order } = request.all()
 
     let today = new Date()
     const year = today.getFullYear()
@@ -26,16 +25,16 @@ class EventController {
     if (all) {
       events = await events
         .query()
-        .orderBy('start', 'asc')
+        .orderBy('start', order ? order : 'desc')
         .with('equipments')
-        .paginate(1, 10)
+        .paginate(page ? page : 1, limit ? limit : 10)
     } else {
       events = await events
         .query()
         .where('start', '>=', today)
-        .orderBy('start', 'asc')
+        .orderBy('start', order ? order : 'desc')
         .with('equipments')
-        .paginate(1, 10)
+        .paginate(page ? page : 1, limit ? limit : 10)
     }
 
     return response.json({ events })
