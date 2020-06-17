@@ -12,7 +12,7 @@ const Equipment = use('App/Models/Equipment')
  */
 class EventController {
   async index({ request, response }) {
-    let { page } = request.all()
+    let { page, all } = request.all()
     page = page ? page : 1
 
     let today = new Date()
@@ -21,11 +21,22 @@ class EventController {
     const day = today.getDate()
     today = `${year}-${month}-${day}`
 
-    const events = await Event.query()
-      .where('created_at', '>=', today)
-      .orderBy('created_at', 'asc')
-      .with('equipments')
-      .paginate(1, 10)
+    let events = Event
+
+    if (all) {
+      events = await events
+        .query()
+        .orderBy('start', 'asc')
+        .with('equipments')
+        .paginate(1, 10)
+    } else {
+      events = await events
+        .query()
+        .where('start', '>=', today)
+        .orderBy('start', 'asc')
+        .with('equipments')
+        .paginate(1, 10)
+    }
 
     return response.json({ events })
   }
