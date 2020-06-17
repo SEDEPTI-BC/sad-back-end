@@ -14,9 +14,19 @@ class EventController {
   async index({ request, response }) {
     let { page } = request.all()
     page = page ? page : 1
+
+    let today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth() + 1
+    const day = today.getDate()
+    today = `${year}-${month}-${day}`
+
     const events = await Event.query()
+      .where('created_at', '>=', today)
+      .orderBy('created_at', 'asc')
       .with('equipments')
-      .paginate(page ? page : 1, 10)
+      .paginate(1, 10)
+
     return response.json({ events })
   }
 
