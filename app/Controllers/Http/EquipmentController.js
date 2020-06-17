@@ -14,8 +14,9 @@ class EquipmentController {
     return response.json({ equipments })
   }
 
-  async store({ request, auth, response }) {
-    const attributes = { ...request.only(['name']) }
+  async store({ request, response }) {
+    let attributes = { ...request.only(['name']) }
+    attributes.name = attributes.name.toLowerCase()
     const equipment = await Equipment.create(attributes)
     return response.json({ equipment })
   }
