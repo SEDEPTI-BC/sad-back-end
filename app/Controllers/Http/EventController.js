@@ -12,11 +12,31 @@ const Equipment = use('App/Models/Equipment')
  */
 class EventController {
   async index({ request, response }) {
-    let { page } = request.all()
-    page = page ? page : 1
-    const events = await Event.query()
-      .with('equipments')
-      .paginate(page ? page : 1, 10)
+    let { page, all, limit, order } = request.all()
+
+    let today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth() + 1
+    const day = today.getDate()
+    today = `${year}-${month}-${day}`
+
+    let events = Event
+
+    if (all) {
+      events = await events
+        .query()
+        .orderBy('start', order ? order : 'desc')
+        .with('equipments')
+        .paginate(page ? page : 1, limit ? limit : 10)
+    } else {
+      events = await events
+        .query()
+        .where('start', '>=', today)
+        .orderBy('start', order ? order : 'desc')
+        .with('equipments')
+        .paginate(page ? page : 1, limit ? limit : 10)
+    }
+
     return response.json({ events })
   }
 
