@@ -13,6 +13,10 @@ class Event extends Model {
       'equipment_event'
     )
   }
+
+  static get dates() {
+    return super.dates.concat(['start', 'end'])
+  }
 }
 
 module.exports = Event
