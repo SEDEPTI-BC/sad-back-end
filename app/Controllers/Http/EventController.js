@@ -94,7 +94,7 @@ class EventController {
     const event = await Event.findOrFail(params.id)
     await event.delete()
 
-    return response.status(204).json({
+    return response.json({
       message: 'Evento deletado com sucesso!',
     })
   }
