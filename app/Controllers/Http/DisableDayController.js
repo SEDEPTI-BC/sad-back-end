@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const DisableDay = use('App/Models/DisableDay')
+const Database = use('Database')
 
 class DisableDayController {
   async index({ request, response }) {
@@ -42,6 +43,22 @@ class DisableDayController {
     await disable_days.delete()
 
     return response.status(204)
+  }
+
+  async currentMonth({ request, response }) {
+    const { month, year } = request.all()
+    const lastDay = new Date(year, month, 0).getDate()
+    const disabled_days = await Database.table(
+      'disable_days'
+    ).whereBetween('start', [
+      `${year}-${month}-01`,
+      `${year}-${month}-${lastDay}`,
+    ])
+
+    response.json({
+      disabled_days,
+      lastDay,
+    })
   }
 }
 

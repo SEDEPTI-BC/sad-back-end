@@ -36,4 +36,5 @@ Route.group(() => {
     .only(['store', 'destroy', 'update'])
     .middleware('auth:jwt')
   Route.get('/disable_days', 'DisableDayController.index')
+  Route.get('/disable_days_current_month', 'DisableDayController.currentMonth')
 }).prefix('/api/v1')
