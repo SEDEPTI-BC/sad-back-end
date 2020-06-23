@@ -57,7 +57,6 @@ class DisableDayController {
 
     response.json({
       disabled_days,
-      lastDay,
     })
   }
 }
