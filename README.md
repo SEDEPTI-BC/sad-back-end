@@ -23,6 +23,22 @@ or manually clone the repo and then run `npm install`.
 
 Run the following command to run startup migrations.
 
-```js
+```bash
 adonis migration:run
+```
+
+
+# Docker 
+
+Run the following commands to run the database container in docker
+
+## Up image
+
+```bash
+docker-compose up
+```
+## Run container
+
+```bash
+docker start #image hash, example: e5c4c50f45f2
 ```
