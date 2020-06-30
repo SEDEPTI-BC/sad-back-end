@@ -6,6 +6,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
+const Schedule = use('App/Models/Schedule')
 
 /**
  * Resourceful controller for interacting with events
@@ -42,6 +43,7 @@ class EventController {
 
   async store({ request, response }) {
     const { equipments } = request.post()
+    const { schedules } = request.post()
 
     const event = await Event.create({
       ...request.only(['owner', 'email', 'title', 'description', 'date']),
@@ -54,6 +56,17 @@ class EventController {
       })
     }
 
+    if (schedules) {
+      equipments.forEach(async (selected) => {
+        const schedule = await Schedule.findBy('value', selected)
+        await event.schedules().attach([schedule.id])
+      })
+    } else {
+      return response.status(400).json({
+        message: 'Sem horários selecionado',
+      })
+    }
+
     return response.status(201).json({
       message: 'Evento criado com sucesso!',
       data: event,
@@ -62,6 +75,7 @@ class EventController {
 
   async update({ params, request, response }) {
     const { equipments } = request.post()
+    const { schedules } = request.post()
 
     const event = await Event.findOrFail(params.id)
 
@@ -76,6 +90,15 @@ class EventController {
         await event.equipments().attach([equipment.id])
       })
     }
+
+    if (schedules) {
+      await event.schedules().detach()
+      schedules.forEach(async (selected) => {
+        const schedule = await Schedule.findBy('value', selected)
+        await event.schedules().attach([schedule.id])
+      })
+    }
+
     event.save()
     return response.status(200).json({
       message: 'Evento atualizado com sucesso!',
