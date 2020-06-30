@@ -28,6 +28,7 @@ class EventController {
         .query()
         .orderBy('date', order ? order : 'desc')
         .with('equipments')
+        .with('schedules')
         .paginate(page ? page : 1, limit ? limit : 10)
     } else {
       events = await events
@@ -35,6 +36,7 @@ class EventController {
         .where('date', '>=', today)
         .orderBy('date', order ? order : 'desc')
         .with('equipments')
+        .with('schedules')
         .paginate(page ? page : 1, limit ? limit : 10)
     }
 
@@ -102,7 +104,6 @@ class EventController {
     event.save()
     return response.status(200).json({
       message: 'Evento atualizado com sucesso!',
-      data: event,
     })
   }
 

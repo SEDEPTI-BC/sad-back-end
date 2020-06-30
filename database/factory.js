@@ -23,27 +23,37 @@ Factory.blueprint('App/Models/User', (faker) => {
 })
 
 Factory.blueprint('App/Models/Event', (faker) => {
+  const now = new Date()
+  const thisYear = now.getFullYear()
+  const month = faker.hour({ twentyfour: true })
+  const day = faker.hour({ twentyfour: true })
+
   return {
     owner: faker.name({ nationality: 'it' }),
     email: faker.email({ domain: 'gmail.com' }),
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
-    date: '2020-02-10 10:51:16',
+    date: `${thisYear}-${month}-${day} 00:00:00`,
   }
+})
+
+Factory.blueprint('App/Models/Schedule', (faker) => {
+  const hour = Math.random() * (20 - 8) + 8
+  return { value: `${hour}:00:00` }
 })
 
 Factory.blueprint('App/Models/Equipment', (faker) => {
   return {
-    name: faker.animal({ type: 'zoo' }),
+    name: faker.word(),
   }
 })
 
 Factory.blueprint('App/Models/DisableDay', async (faker) => {
   const day = Math.random() * (31 - 1) + 1
   const now = new Date()
-  const month = now.getMonth() + 1
-
-  const date = new Date(2020, month, day, 8)
+  const year = now.getFullYear()
+  const month = faker.hour() - 1
+  const date = new Date(year, month, day, 8)
 
   const user = await Factory.model('App/Models/User').create()
 
@@ -64,3 +74,13 @@ Factory.blueprint('equipment_event', async (faker) => {
     equipment_id: event.id,
   }
 })
+
+// Factory.blueprint('event_schedule', async (faker) => {
+//   const event = await Factory.model('App/Models/Event').create()
+//   const schedule = await Factory.model('App/Models/Schedule').create()
+
+//   return {
+//     event_id: event.id,
+//     schedule_id: schedule.id,
+//   }
+// })
