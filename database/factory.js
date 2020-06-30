@@ -41,7 +41,7 @@ Factory.blueprint('App/Models/Equipment', (faker) => {
 Factory.blueprint('App/Models/DisableDay', async (faker) => {
   const day = Math.random() * (31 - 1) + 1
   const now = new Date()
-  const month = now.getMonth()
+  const month = now.getMonth() + 1
 
   const date = new Date(2020, month, day, 8)
 

@@ -10,6 +10,7 @@ class DisableDaySchema extends Schema {
       table.integer('user_id').unsigned().notNullable()
       table.datetime('date').notNullable()
       table.string('title').notNullable()
+      table.boolean('full_day').defaultTo(false)
       table.string('description')
       table.timestamps()
 
