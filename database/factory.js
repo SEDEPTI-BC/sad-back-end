@@ -34,7 +34,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
 
 Factory.blueprint('App/Models/Equipment', (faker) => {
   return {
-    name: chance.animal({ type: 'zoo' }),
+    name: faker.animal({ type: 'zoo' }),
   }
 })
 
