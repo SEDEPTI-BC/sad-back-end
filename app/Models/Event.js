@@ -21,7 +21,7 @@ class Event extends Model {
   }
 
   static get dates() {
-    return super.dates.concat(['start', 'end'])
+    return super.dates.concat(['start'])
   }
 }
 

@@ -44,14 +44,7 @@ class EventController {
     const { equipments } = request.post()
 
     const event = await Event.create({
-      ...request.only([
-        'owner',
-        'email',
-        'title',
-        'description',
-        'start',
-        'end',
-      ]),
+      ...request.only(['owner', 'email', 'title', 'description', 'start']),
     })
 
     if (equipments) {
@@ -73,7 +66,7 @@ class EventController {
     const event = await Event.findOrFail(params.id)
 
     await event.merge(
-      request.only(['owner', 'email', 'title', 'description', 'start', 'end'])
+      request.only(['owner', 'email', 'title', 'description', 'start'])
     )
 
     if (equipments) {

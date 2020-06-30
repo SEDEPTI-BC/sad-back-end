@@ -29,7 +29,6 @@ Factory.blueprint('App/Models/Event', (faker) => {
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
     start: '2020-02-10 10:51:16',
-    end: '2020-02-10 12:51:16',
   }
 })
 
@@ -45,7 +44,6 @@ Factory.blueprint('App/Models/DisableDay', async (faker) => {
   const month = now.getMonth()
 
   const start = new Date(2020, month, day, 8)
-  const end = new Date(2020, month, day, 12)
 
   const user = await Factory.model('App/Models/User').create()
 
@@ -53,7 +51,6 @@ Factory.blueprint('App/Models/DisableDay', async (faker) => {
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
     start: start,
-    end: end,
     user_id: user.id,
   }
 })

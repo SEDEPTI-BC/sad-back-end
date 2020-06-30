@@ -9,7 +9,6 @@ class DisableDaySchema extends Schema {
       table.increments()
       table.integer('user_id').unsigned().notNullable()
       table.datetime('start').notNullable()
-      table.datetime('end').notNullable()
       table.string('title').notNullable()
       table.string('description')
       table.timestamps()

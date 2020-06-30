@@ -19,7 +19,7 @@ class DisableDayController {
     const user_id = user.id
     const attributes = {
       user_id,
-      ...request.only(['start', 'end', 'title', 'description']),
+      ...request.only(['start', 'title', 'description']),
     }
     const disable_day = await DisableDay.create(attributes)
     return response.status(201).json({
