@@ -16,7 +16,7 @@ const Factory = use('Factory')
 
 Factory.blueprint('App/Models/User', (faker) => {
   return {
-    username: faker.username(),
+    username: faker.name({ nationality: 'it' }),
     email: faker.email(),
     password: '123456',
   }
@@ -24,7 +24,7 @@ Factory.blueprint('App/Models/User', (faker) => {
 
 Factory.blueprint('App/Models/Event', (faker) => {
   return {
-    owner: faker.name(),
+    owner: faker.name({ nationality: 'it' }),
     email: faker.email({ domain: 'gmail.com' }),
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
@@ -34,7 +34,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
 
 Factory.blueprint('App/Models/Equipment', (faker) => {
   return {
-    name: faker.word(),
+    name: chance.animal({ type: 'zoo' }),
   }
 })
 

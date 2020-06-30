@@ -18,6 +18,7 @@ class DisableDayController {
     const { schedules } = request.post()
     const user = await auth.getUser()
     const user_id = user.id
+
     const attributes = {
       user_id,
       ...request.only(['date', 'title', 'description', 'full_day']),
