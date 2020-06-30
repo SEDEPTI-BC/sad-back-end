@@ -22,7 +22,7 @@ test('authorized user can create a event', async ({ client }) => {
       title: 'teste',
       email: 'teste@gmail.com',
       description: 'teste',
-      start: '2020-02-02 00:00:00',
+      date: '2020-02-02 00:00:00',
       equipments,
     })
     .loginVia(user, 'jwt')
@@ -44,7 +44,7 @@ test('unauthorized user can not create a event', async ({ client }) => {
       title: 'teste',
       email: 'teste@gmail.com',
       description: 'teste',
-      start: '2020-02-02 00:00:00',
+      date: '2020-02-02 00:00:00',
       equipments,
     })
     .loginVia(user, 'jwt')

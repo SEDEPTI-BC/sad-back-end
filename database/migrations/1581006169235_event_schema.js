@@ -11,7 +11,7 @@ class EventSchema extends Schema {
       table.string('email').notNullable()
       table.string('title').notNullable()
       table.text('description').defaultTo('')
-      table.datetime('start', { presicion: 6 }).notNullable()
+      table.datetime('date', { presicion: 6 }).notNullable()
       table.timestamps()
     })
   }

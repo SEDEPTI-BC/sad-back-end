@@ -25,14 +25,14 @@ class EventController {
     if (all) {
       events = await events
         .query()
-        .orderBy('start', order ? order : 'desc')
+        .orderBy('date', order ? order : 'desc')
         .with('equipments')
         .paginate(page ? page : 1, limit ? limit : 10)
     } else {
       events = await events
         .query()
-        .where('start', '>=', today)
-        .orderBy('start', order ? order : 'desc')
+        .where('date', '>=', today)
+        .orderBy('date', order ? order : 'desc')
         .with('equipments')
         .paginate(page ? page : 1, limit ? limit : 10)
     }
@@ -44,7 +44,7 @@ class EventController {
     const { equipments } = request.post()
 
     const event = await Event.create({
-      ...request.only(['owner', 'email', 'title', 'description', 'start']),
+      ...request.only(['owner', 'email', 'title', 'description', 'date']),
     })
 
     if (equipments) {
@@ -66,7 +66,7 @@ class EventController {
     const event = await Event.findOrFail(params.id)
 
     await event.merge(
-      request.only(['owner', 'email', 'title', 'description', 'start'])
+      request.only(['owner', 'email', 'title', 'description', 'date'])
     )
 
     if (equipments) {

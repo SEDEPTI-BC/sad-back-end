@@ -19,7 +19,7 @@ class DisableDayController {
     const user_id = user.id
     const attributes = {
       user_id,
-      ...request.only(['start', 'title', 'description']),
+      ...request.only(['date', 'title', 'description']),
     }
     const disable_day = await DisableDay.create(attributes)
     return response.status(201).json({
@@ -50,7 +50,7 @@ class DisableDayController {
     const lastDay = new Date(year, month, 0).getDate()
     const disabled_days = await Database.table(
       'disable_days'
-    ).whereBetween('start', [
+    ).whereBetween('date', [
       `${year}-${month}-01`,
       `${year}-${month}-${lastDay}`,
     ])

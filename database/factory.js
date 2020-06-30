@@ -28,7 +28,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
     email: faker.email({ domain: 'gmail.com' }),
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
-    start: '2020-02-10 10:51:16',
+    date: '2020-02-10 10:51:16',
   }
 })
 
@@ -43,14 +43,14 @@ Factory.blueprint('App/Models/DisableDay', async (faker) => {
   const now = new Date()
   const month = now.getMonth()
 
-  const start = new Date(2020, month, day, 8)
+  const date = new Date(2020, month, day, 8)
 
   const user = await Factory.model('App/Models/User').create()
 
   return {
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
-    start: start,
+    date: date,
     user_id: user.id,
   }
 })
