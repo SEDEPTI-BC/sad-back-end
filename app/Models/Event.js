@@ -14,6 +14,12 @@ class Event extends Model {
     )
   }
 
+  schedules() {
+    return this.belongsToMany('App/Models/Schedule').pivotTable(
+      'event_schedule'
+    )
+  }
+
   static get dates() {
     return super.dates.concat(['start', 'end'])
   }
