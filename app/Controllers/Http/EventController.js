@@ -57,7 +57,7 @@ class EventController {
     }
 
     if (schedules) {
-      equipments.forEach(async (selected) => {
+      schedules.forEach(async (selected) => {
         const schedule = await Schedule.findBy('value', selected)
         await event.schedules().attach([schedule.id])
       })
