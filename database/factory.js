@@ -39,7 +39,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
 })
 
 Factory.blueprint('App/Models/Schedule', (faker) => {
-  const hour = Math.random() * (20 - 8) + 8
+  const hour = Math.ceil(Math.random() * (20 - 8) + 8)
   return { value: `${hour}:00:00` }
 })
 
@@ -66,20 +66,19 @@ Factory.blueprint('App/Models/DisableDay', async (faker) => {
   }
 })
 
-Factory.blueprint('equipment_event', async (faker) => {
-  const equipment = await Factory.model('App/Models/Equipment').create()
+Factory.blueprint('event_schedule', async (faker) => {
+  const schedule = await Factory.model('App/Models/Schedule').create()
   const event = await Factory.model('App/Models/Event').create()
 
   return {
-    event_id: equipment.id,
-    equipment_id: event.id,
+    schedule_id: schedule.id,
+    event_id: event.id,
   }
 })
 
-// Factory.blueprint('event_schedule', async (faker, i, data) => {
-//   console.log(data[i])
-//   return {
-//     event_id: data[i],
-//     equipment_id: data[i],
-//   }
-// })
+Factory.blueprint('equipment_event', async (faker, i, data) => {
+  return {
+    event_id: data[i],
+    equipment_id: data[i],
+  }
+})
