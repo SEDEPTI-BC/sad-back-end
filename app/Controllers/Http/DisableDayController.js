@@ -80,10 +80,12 @@ class DisableDayController {
   async currentMonth({ request, response }) {
     const { month, year } = request.all()
     const lastDay = new Date(year, month, 0).getDate()
+    const firstDay = '01'
+
     const disabled_days = await Database.table(
       'disable_days'
     ).whereBetween('date', [
-      `${year}-${month}-01`,
+      `${year}-${month}-${firstDay}`,
       `${year}-${month}-${lastDay}`,
     ])
 
