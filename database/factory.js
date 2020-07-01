@@ -76,9 +76,10 @@ Factory.blueprint('event_schedule', async (faker) => {
   }
 })
 
-Factory.blueprint('equipment_event', async (faker, i, data) => {
+Factory.blueprint('equipment_event', async (faker) => {
+  const created = await Factory.model('App/Models/Equipment').create()
   return {
-    event_id: data[i],
-    equipment_id: data[i],
+    event_id: created.id,
+    equipment_id: created.id,
   }
 })

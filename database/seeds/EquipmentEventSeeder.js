@@ -15,7 +15,7 @@ const Factory = use('Factory')
 
 class EquipmentEventSeeder {
   async run() {
-    // await Factory.get('equipment_event').createMany(5)
+    await Factory.get('equipment_event').createMany(5)
   }
 }
 
