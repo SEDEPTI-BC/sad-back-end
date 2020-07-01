@@ -31,6 +31,7 @@ Route.group(() => {
   Route.resource('events', 'EventController')
     .only(['index', 'store', 'destroy', 'update'])
     .middleware('auth:jwt')
+  Route.get('/events_current_month', 'EventController.currentMonth')
 
   Route.resource('disable_days', 'DisableDayController')
     .only(['store', 'destroy', 'update'])

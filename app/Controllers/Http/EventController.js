@@ -115,6 +115,21 @@ class EventController {
       message: 'Evento deletado com sucesso!',
     })
   }
+
+  async currentMonth({ request, response }) {
+    const { month, year } = request.all()
+    const lastDay = new Date(year, month, 0).getDate()
+    const firstDay = '01'
+
+    const events = await Database.table('events').whereBetween('date', [
+      `${year}-${month}-${firstDay}`,
+      `${year}-${month}-${lastDay}`,
+    ])
+
+    response.json({
+      events,
+    })
+  }
 }
 
 module.exports = EventController
