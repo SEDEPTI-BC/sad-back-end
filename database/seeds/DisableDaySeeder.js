@@ -15,9 +15,9 @@ const Factory = use('Factory')
 
 class DisableDaySeeder {
   async run() {
-    const disable_day = await Factory.model('App/Models/DisableDay').createMany(
-      5
-    )
+    // const disable_day = await Factory.model('App/Models/DisableDay').createMany(
+    //   5
+    // )
   }
 }
 

@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| EquipmentEventSeeder
+| EventScheduleSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -13,10 +13,12 @@
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
 
-class EquipmentEventSeeder {
+class DisableDayScheduleSeeder {
   async run() {
-    // await Factory.get('equipment_event').createMany(5)
+    const disableDaychedules = await Factory.get(
+      'disable_day_schedule'
+    ).createMany(5)
   }
 }
 
-module.exports = EquipmentEventSeeder
+module.exports = DisableDayScheduleSeeder
