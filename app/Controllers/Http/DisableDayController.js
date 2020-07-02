@@ -74,7 +74,9 @@ class DisableDayController {
     const disable_days = await DisableDay.findOrFail(params.id)
     await disable_days.delete()
 
-    return response.status(204)
+    return response.status(204).json({
+      message: 'Excluído com sucesso',
+    })
   }
 
   async currentMonth({ request, response }) {
@@ -89,20 +91,23 @@ class DisableDayController {
       `${year}-${month}-${lastDay}`,
     ])
 
-    const disabled_days_ids = disabledDays.map((day) => day.id)
-    disabledDays
-    const schedules_ids = await Database.select('schedule_id')
-      .from('disable_day_schedule')
-      .whereIn('disable_day_id', disabled_days_ids)
-      .map((elem) => elem.schedule_id)
+    let disableDaysSchedule = []
 
-    const schedules = await Database.table('schedules').whereIn(
-      'id',
-      schedules_ids
-    )
+    disabledDays.forEach(async (day, index) => {
+      const schedules_ids = await Database.select('schedule_id')
+        .from('disable_day_schedule')
+        .where('disable_day_id', day.id)
+        .map((elem) => elem.schedule_id)
+
+      const schedules = await Database.table('schedules').whereIn(
+        'id',
+        schedules_ids
+      )
+    })
 
     response.json({
       disabledDays,
+      disableDaysSchedule,
     })
   }
 }
