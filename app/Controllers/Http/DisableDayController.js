@@ -4,6 +4,7 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const DisableDay = use('App/Models/DisableDay')
+const Schedule = use('App/Models/Schedule')
 const Database = use('Database')
 
 class DisableDayController {
@@ -19,16 +20,16 @@ class DisableDayController {
     const user = await auth.getUser()
     const user_id = user.id
 
-    const attributes = {
+    const disableDays = await DisableDay.create({
       user_id,
       ...request.only(['date', 'title', 'description', 'full_day']),
-    }
+    })
 
-    if (!attributes.full_day) {
+    if (!disableDays.full_day) {
       if (schedules) {
         schedules.forEach(async (selected) => {
           const schedule = await Schedule.findBy('value', selected)
-          await event.schedules().attach([schedule.id])
+          await disableDays.schedules().attach([schedule.id])
         })
       } else {
         return response.status(400).json({
@@ -37,23 +38,22 @@ class DisableDayController {
       }
     }
 
-    const disable_day = await DisableDay.create(attributes)
     return response.status(201).json({
       message: 'Dia desabilitado com sucesso',
-      data: disable_day,
+      data: disableDays,
     })
   }
 
   async update({ params, request, response }) {
     const { schedules } = request.post()
-    const disable_days = await DisableDay.findOrFail(params.id)
-    disable_days.merge(request.all())
+    const disableDays = await DisableDay.findOrFail(params.id)
+    disableDays.merge(request.all())
 
-    if (!disable_days.full_day) {
+    if (!disableDays.full_day) {
       if (schedules) {
         schedules.forEach(async (selected) => {
           const schedule = await Schedule.findBy('value', selected)
-          await event.schedules().attach([schedule.id])
+          await disableDays.schedules().attach([schedule.id])
         })
       } else {
         return response.status(400).json({
@@ -62,11 +62,11 @@ class DisableDayController {
       }
     }
 
-    disable_days.save()
+    disableDays.save()
 
     return response.status(200).json({
       message: 'Atualizado com sucesso',
-      data: disable_days,
+      data: disableDays,
     })
   }
 
@@ -88,6 +88,18 @@ class DisableDayController {
       `${year}-${month}-${firstDay}`,
       `${year}-${month}-${lastDay}`,
     ])
+
+    const disabled_days_ids = disabled_days.map((day) => day.id)
+
+    const schedules_ids = await Database.select('schedule_id')
+      .from('disable_day_schedule')
+      .whereIn('disable_day_id', disabled_days_ids)
+      .map((elem) => elem.schedule_id)
+
+    const schedules = await Database.table('schedules').whereIn(
+      'id',
+      schedules_ids
+    )
 
     response.json({
       disabled_days,
