@@ -46,19 +46,13 @@ class EventController {
   async store({ request, response }) {
     const { equipments } = request.post()
     const { schedules } = request.post()
-
-    const event = await Event.create({
-      ...request.only(['owner', 'email', 'title', 'description', 'date']),
-    })
-
-    if (equipments) {
-      equipments.forEach(async (selected) => {
-        const equipment = await Equipment.findBy('name', selected)
-        await event.equipments().attach([equipment.id])
-      })
-    }
+    let event = null
 
     if (schedules) {
+      event = await Event.create({
+        ...request.only(['owner', 'email', 'title', 'description', 'date']),
+      })
+
       schedules.forEach(async (selected) => {
         const schedule = await Schedule.findBy('value', selected)
         await event.schedules().attach([schedule.id])
@@ -66,6 +60,13 @@ class EventController {
     } else {
       return response.status(400).json({
         message: 'Sem horários selecionado',
+      })
+    }
+
+    if (equipments) {
+      equipments.forEach(async (selected) => {
+        const equipment = await Equipment.findBy('name', selected)
+        await event.equipments().attach([equipment.id])
       })
     }
 
