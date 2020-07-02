@@ -93,7 +93,7 @@ class DisableDayController {
 
     let disableDaysSchedule = []
 
-    disabledDays.forEach(async (day, index) => {
+    for (const day of disabledDays) {
       const schedules_ids = await Database.select('schedule_id')
         .from('disable_day_schedule')
         .where('disable_day_id', day.id)
@@ -103,11 +103,12 @@ class DisableDayController {
         'id',
         schedules_ids
       )
-    })
+
+      disableDaysSchedule.push({ ...day, schedules })
+    }
 
     response.json({
-      disabledDays,
-      disableDaysSchedule,
+      disabledDays: disableDaysSchedule,
     })
   }
 }
