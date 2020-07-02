@@ -82,15 +82,15 @@ class DisableDayController {
     const lastDay = new Date(year, month, 0).getDate()
     const firstDay = '01'
 
-    const disabled_days = await Database.table(
+    const disabledDays = await Database.table(
       'disable_days'
     ).whereBetween('date', [
       `${year}-${month}-${firstDay}`,
       `${year}-${month}-${lastDay}`,
     ])
 
-    const disabled_days_ids = disabled_days.map((day) => day.id)
-
+    const disabled_days_ids = disabledDays.map((day) => day.id)
+    disabledDays
     const schedules_ids = await Database.select('schedule_id')
       .from('disable_day_schedule')
       .whereIn('disable_day_id', disabled_days_ids)
@@ -102,7 +102,7 @@ class DisableDayController {
     )
 
     response.json({
-      disabled_days,
+      disabledDays,
     })
   }
 }
