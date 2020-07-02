@@ -10,7 +10,7 @@ class DisableDay extends Model {
 
   schedules() {
     return this.belongsToMany('App/Models/Schedule').pivotTable(
-      'event_schedule'
+      'disable_day_schedule'
     )
   }
 
