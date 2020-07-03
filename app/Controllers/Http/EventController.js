@@ -7,6 +7,7 @@
 const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
 const Schedule = use('App/Models/Schedule')
+const Database = use('Database')
 
 /**
  * Resourceful controller for interacting with events
