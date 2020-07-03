@@ -13,6 +13,7 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
+const Equipment = use('App/Models/Equipment')
 
 Factory.blueprint('App/Models/User', (faker) => {
   return {
@@ -77,9 +78,10 @@ Factory.blueprint('disable_day_schedule', async (faker) => {
   }
 })
 
-Factory.blueprint('event_schedule', async (faker) => {
+Factory.blueprint('event_schedule', async () => {
   const schedule = await Factory.model('App/Models/Schedule').create()
   const event = await Factory.model('App/Models/Event').create()
+  await Factory.get('equipment_event').create(event)
 
   return {
     schedule_id: schedule.id,
@@ -87,10 +89,10 @@ Factory.blueprint('event_schedule', async (faker) => {
   }
 })
 
-Factory.blueprint('equipment_event', async (faker) => {
-  const created = await Factory.model('App/Models/Equipment').create()
+Factory.blueprint('equipment_event', async (faker, i, event) => {
+  const equipment = await Factory.model('App/Models/Equipment').create()
   return {
-    event_id: created.id,
-    equipment_id: created.id,
+    event_id: event.id,
+    equipment_id: equipment.id,
   }
 })
