@@ -19,11 +19,12 @@ class ScheduleController {
     return response.status(201).json({ schedule })
   }
 
-  async show({ params, request, response, view }) {}
-
-  async edit({ params, request, response, view }) {}
-
-  async update({ params, request, response }) {}
+  async update({ params, request, response }) {
+    const schedule = await Schedule.findOrFail(params.id)
+    schedule.merge(request.only(['value']))
+    schedule.save()
+    return response.json({ schedule })
+  }
 
   async destroy({ params, request, response }) {}
 }
