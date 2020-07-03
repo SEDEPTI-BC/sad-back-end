@@ -41,7 +41,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
 
 Factory.blueprint('App/Models/Schedule', (faker) => {
   const hour = Math.ceil(Math.random() * (20 - 8) + 8)
-  return { value: `${hour}:00:00` }
+  return { hour} }
 })
 
 Factory.blueprint('App/Models/Equipment', (faker) => {

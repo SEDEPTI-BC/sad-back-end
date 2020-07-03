@@ -54,7 +54,7 @@ class EventController {
       })
 
       schedules.forEach(async (selected) => {
-        const schedule = await Schedule.findBy('value', selected)
+        const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
     } else {
@@ -97,7 +97,7 @@ class EventController {
     if (schedules) {
       await event.schedules().detach()
       schedules.forEach(async (selected) => {
-        const schedule = await Schedule.findBy('value', selected)
+        const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
     }
