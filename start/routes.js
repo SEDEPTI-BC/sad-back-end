@@ -38,4 +38,9 @@ Route.group(() => {
     .middleware('auth:jwt')
   Route.get('/disable_days', 'DisableDayController.index')
   Route.get('/disable_days_current_month', 'DisableDayController.currentMonth')
+
+  Route.resource('schedules', 'ScheduleController')
+    .only(['store', 'destroy', 'update'])
+    .middleware('auth:jwt')
+  Route.get('schedules', 'ScheduleController.index')
 }).prefix('/api/v1')
