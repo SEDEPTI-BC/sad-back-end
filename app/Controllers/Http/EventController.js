@@ -127,8 +127,24 @@ class EventController {
       `${year}-${month}-${lastDay}`,
     ])
 
+    let eventsSchedules = []
+
+    for (const event of events) {
+      const schedules_ids = await Database.select('schedule_id')
+        .from('event_schedule')
+        .where('event_id', event.id)
+        .map((elem) => elem.schedule_id)
+
+      const schedules = await Database.table('schedules').whereIn(
+        'id',
+        schedules_ids
+      )
+
+      eventsSchedules.push({ ...event, schedules })
+    }
+
     response.json({
-      events,
+      events: eventsSchedules,
     })
   }
 }
