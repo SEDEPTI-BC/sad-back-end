@@ -26,7 +26,13 @@ class ScheduleController {
     return response.json({ schedule })
   }
 
-  async destroy({ params, request, response }) {}
+  async destroy({ params, request, response }) {
+    const schedule = await Schedule.findOrFail(params.id)
+    await schedule.delete()
+    return response.json({
+      message: 'Deletado com sucesso',
+    })
+  }
 }
 
 module.exports = ScheduleController
