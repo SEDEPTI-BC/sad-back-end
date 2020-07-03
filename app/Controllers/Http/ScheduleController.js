@@ -4,13 +4,14 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 const Schedule = use('App/Models/Schedule')
+const Database = use('Database')
 
 /**
  * Resourceful controller for interacting with schedules
  */
 class ScheduleController {
   async index({ response }) {
-    const schedules = await Schedule.all()
+    const schedules = await Database.table('schedules').orderBy('hour', 'asc')
     return response.json({ schedules })
   }
 
