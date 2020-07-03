@@ -5,14 +5,13 @@ const Schema = use('Schema')
 
 class EventSchema extends Schema {
   up() {
-    this.create('events', table => {
+    this.create('events', (table) => {
       table.increments()
       table.string('owner').notNullable()
       table.string('email').notNullable()
       table.string('title').notNullable()
       table.text('description').defaultTo('')
-      table.datetime('start', { presicion: 6 }).notNullable()
-      table.datetime('end', { precision: 6 }).notNullable()
+      table.datetime('date', { presicion: 6 }).notNullable()
       table.timestamps()
     })
   }

@@ -6,6 +6,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
+const Schedule = use('App/Models/Schedule')
 
 /**
  * Resourceful controller for interacting with events
@@ -25,15 +26,17 @@ class EventController {
     if (all) {
       events = await events
         .query()
-        .orderBy('start', order ? order : 'desc')
+        .orderBy('date', order ? order : 'desc')
         .with('equipments')
+        .with('schedules')
         .paginate(page ? page : 1, limit ? limit : 10)
     } else {
       events = await events
         .query()
-        .where('start', '>=', today)
-        .orderBy('start', order ? order : 'desc')
+        .where('date', '>=', today)
+        .orderBy('date', order ? order : 'desc')
         .with('equipments')
+        .with('schedules')
         .paginate(page ? page : 1, limit ? limit : 10)
     }
 
@@ -42,17 +45,23 @@ class EventController {
 
   async store({ request, response }) {
     const { equipments } = request.post()
+    const { schedules } = request.post()
+    let event = null
 
-    const event = await Event.create({
-      ...request.only([
-        'owner',
-        'email',
-        'title',
-        'description',
-        'start',
-        'end',
-      ]),
-    })
+    if (schedules) {
+      event = await Event.create({
+        ...request.only(['owner', 'email', 'title', 'description', 'date']),
+      })
+
+      schedules.forEach(async (selected) => {
+        const schedule = await Schedule.findBy('value', selected)
+        await event.schedules().attach([schedule.id])
+      })
+    } else {
+      return response.status(400).json({
+        message: 'Sem horários selecionado',
+      })
+    }
 
     if (equipments) {
       equipments.forEach(async (selected) => {
@@ -69,11 +78,12 @@ class EventController {
 
   async update({ params, request, response }) {
     const { equipments } = request.post()
+    const { schedules } = request.post()
 
     const event = await Event.findOrFail(params.id)
 
     await event.merge(
-      request.only(['owner', 'email', 'title', 'description', 'start', 'end'])
+      request.only(['owner', 'email', 'title', 'description', 'date'])
     )
 
     if (equipments) {
@@ -83,10 +93,18 @@ class EventController {
         await event.equipments().attach([equipment.id])
       })
     }
+
+    if (schedules) {
+      await event.schedules().detach()
+      schedules.forEach(async (selected) => {
+        const schedule = await Schedule.findBy('value', selected)
+        await event.schedules().attach([schedule.id])
+      })
+    }
+
     event.save()
     return response.status(200).json({
       message: 'Evento atualizado com sucesso!',
-      data: event,
     })
   }
 
@@ -96,6 +114,21 @@ class EventController {
 
     return response.json({
       message: 'Evento deletado com sucesso!',
+    })
+  }
+
+  async currentMonth({ request, response }) {
+    const { month, year } = request.all()
+    const lastDay = new Date(year, month, 0).getDate()
+    const firstDay = '01'
+
+    const events = await Database.table('events').whereBetween('date', [
+      `${year}-${month}-${firstDay}`,
+      `${year}-${month}-${lastDay}`,
+    ])
+
+    response.json({
+      events,
     })
   }
 }

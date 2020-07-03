@@ -8,8 +8,14 @@ class DisableDay extends Model {
     return this.belongsTo('App/Models/User')
   }
 
+  schedules() {
+    return this.belongsToMany('App/Models/Schedule').pivotTable(
+      'disable_day_schedule'
+    )
+  }
+
   static get dates() {
-    return super.dates.concat(['start', 'end'])
+    return super.dates.concat(['date'])
   }
 }
 

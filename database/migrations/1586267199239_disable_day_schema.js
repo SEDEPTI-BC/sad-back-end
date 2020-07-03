@@ -8,9 +8,9 @@ class DisableDaySchema extends Schema {
     this.create('disable_days', (table) => {
       table.increments()
       table.integer('user_id').unsigned().notNullable()
-      table.datetime('start').notNullable()
-      table.datetime('end').notNullable()
+      table.datetime('date').notNullable()
       table.string('title').notNullable()
+      table.boolean('full_day').defaultTo(false)
       table.string('description')
       table.timestamps()
 

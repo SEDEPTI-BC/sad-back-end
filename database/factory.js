@@ -13,24 +13,35 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
+const Equipment = use('App/Models/Equipment')
 
 Factory.blueprint('App/Models/User', (faker) => {
   return {
-    username: faker.username(),
+    username: faker.name({ nationality: 'it' }),
     email: faker.email(),
     password: '123456',
   }
 })
 
 Factory.blueprint('App/Models/Event', (faker) => {
+  const now = new Date()
+  const thisYear = now.getFullYear()
+  const month = Math.random() * (11 - 0) + 0
+  const day = Math.random() * (27 - 1) + 1
+  const date = new Date(thisYear, month, day)
+
   return {
-    owner: faker.name(),
+    owner: faker.name({ nationality: 'it' }),
     email: faker.email({ domain: 'gmail.com' }),
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
-    start: '2020-02-10 10:51:16',
-    end: '2020-02-10 12:51:16',
+    date,
   }
+})
+
+Factory.blueprint('App/Models/Schedule', (faker) => {
+  const hour = Math.ceil(Math.random() * (20 - 8) + 8)
+  return { value: `${hour}:00:00` }
 })
 
 Factory.blueprint('App/Models/Equipment', (faker) => {
@@ -40,30 +51,48 @@ Factory.blueprint('App/Models/Equipment', (faker) => {
 })
 
 Factory.blueprint('App/Models/DisableDay', async (faker) => {
-  const day = Math.random() * (31 - 1) + 1
-  const now = new Date()
-  const month = now.getMonth()
-
-  const start = new Date(2020, month, day, 8)
-  const end = new Date(2020, month, day, 12)
-
   const user = await Factory.model('App/Models/User').create()
+  const now = new Date()
+  const thisYear = now.getFullYear()
+  const month = Math.random() * (11 - 0) + 0
+  const day = Math.random() * (27 - 1) + 1
+  const date = new Date(thisYear, month, day)
+  const full_day = Math.random() < 0.5
 
   return {
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
-    start: start,
-    end: end,
+    full_day,
+    date,
     user_id: user.id,
   }
 })
 
-Factory.blueprint('equipment_event', async (faker) => {
-  const equipment = await Factory.model('App/Models/Equipment').create()
-  const event = await Factory.model('App/Models/Event').create()
+Factory.blueprint('disable_day_schedule', async (faker) => {
+  const schedule = await Factory.model('App/Models/Schedule').create()
+  const disableDay = await Factory.model('App/Models/DisableDay').create()
 
   return {
-    event_id: equipment.id,
-    equipment_id: event.id,
+    schedule_id: schedule.id,
+    disable_day_id: disableDay.id,
+  }
+})
+
+Factory.blueprint('event_schedule', async () => {
+  const schedule = await Factory.model('App/Models/Schedule').create()
+  const event = await Factory.model('App/Models/Event').create()
+  await Factory.get('equipment_event').create(event)
+
+  return {
+    schedule_id: schedule.id,
+    event_id: event.id,
+  }
+})
+
+Factory.blueprint('equipment_event', async (faker, i, event) => {
+  const equipment = await Factory.model('App/Models/Equipment').create()
+  return {
+    event_id: event.id,
+    equipment_id: equipment.id,
   }
 })
