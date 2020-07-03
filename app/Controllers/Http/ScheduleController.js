@@ -9,14 +9,15 @@ const Schedule = use('App/Models/Schedule')
  * Resourceful controller for interacting with schedules
  */
 class ScheduleController {
-  async index({ request, response }) {
+  async index({ response }) {
     const schedules = await Schedule.all()
     return response.json({ schedules })
   }
 
-  async create({ request, response, view }) {}
-
-  async store({ request, response }) {}
+  async store({ request, response }) {
+    const schedule = await Schedule.create({ ...request.only(['value']) })
+    return response.status(201).json({ schedule })
+  }
 
   async show({ params, request, response, view }) {}
 
