@@ -34,6 +34,51 @@ class ScheduleController {
       message: 'Deletado com sucesso',
     })
   }
+
+  async disabledScheludes({ response, request }) {
+    const { date } = request.all()
+    const events = await Database.table('events').where('date', date)
+    const disableDays = await Database.table('disable_days').where('date', date)
+
+    let disabledDays = []
+
+    for (const day of disableDays) {
+      const schedules_ids = await Database.select('schedule_id')
+        .from('disable_day_schedule')
+        .where('disable_day_id', day.id)
+        .map((elem) => elem.schedule_id)
+
+      const schedules = await Database.table('schedules').whereIn(
+        'id',
+        schedules_ids
+      )
+      disabledDays = disabledDays.concat(schedules)
+    }
+
+    for (const event of events) {
+      const schedules_ids = await Database.select('schedule_id')
+        .from('event_schedule')
+        .where('event_id', event.id)
+        .map((elem) => elem.schedule_id)
+
+      const schedules = await Database.table('schedules').whereIn(
+        'id',
+        schedules_ids
+      )
+      disabledDays = disabledDays.concat(schedules)
+    }
+
+    disabledDays = disabledDays.map((schedule) => schedule.id)
+
+    const availableSchedules = await Database.table('schedules').whereNotIn(
+      'id',
+      disabledDays
+    )
+
+    return response.json({
+      schedules: availableSchedules,
+    })
+  }
 }
 
 module.exports = ScheduleController
