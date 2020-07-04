@@ -43,4 +43,5 @@ Route.group(() => {
     .only(['store', 'destroy', 'update'])
     .middleware('auth:jwt')
   Route.get('schedules', 'ScheduleController.index')
+  Route.get('disabled_schedules', 'ScheduleController.disabledScheludes')
 }).prefix('/api/v1')

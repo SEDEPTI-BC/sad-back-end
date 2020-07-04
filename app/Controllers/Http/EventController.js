@@ -7,6 +7,7 @@
 const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
 const Schedule = use('App/Models/Schedule')
+const Database = use('Database')
 
 /**
  * Resourceful controller for interacting with events
@@ -54,7 +55,7 @@ class EventController {
       })
 
       schedules.forEach(async (selected) => {
-        const schedule = await Schedule.findBy('value', selected)
+        const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
     } else {
@@ -97,7 +98,7 @@ class EventController {
     if (schedules) {
       await event.schedules().detach()
       schedules.forEach(async (selected) => {
-        const schedule = await Schedule.findBy('value', selected)
+        const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
     }
@@ -127,8 +128,24 @@ class EventController {
       `${year}-${month}-${lastDay}`,
     ])
 
+    let eventsSchedules = []
+
+    for (const event of events) {
+      const schedules_ids = await Database.select('schedule_id')
+        .from('event_schedule')
+        .where('event_id', event.id)
+        .map((elem) => elem.schedule_id)
+
+      const schedules = await Database.table('schedules').whereIn(
+        'id',
+        schedules_ids
+      )
+
+      eventsSchedules.push({ ...event, schedules })
+    }
+
     response.json({
-      events,
+      events: eventsSchedules,
     })
   }
 }
