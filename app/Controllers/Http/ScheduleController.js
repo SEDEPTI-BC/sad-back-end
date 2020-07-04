@@ -70,10 +70,9 @@ class ScheduleController {
 
     disabledDays = disabledDays.map((schedule) => schedule.id)
 
-    const availableSchedules = await Database.table('schedules').whereNotIn(
-      'id',
-      disabledDays
-    )
+    const availableSchedules = await Database.table('schedules')
+      .whereNotIn('id', disabledDays)
+      .orderBy('hour', 'asc')
 
     return response.json({
       schedules: availableSchedules,
