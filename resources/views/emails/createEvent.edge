@@ -1,4 +1,29 @@
-<h2> Hello {{ owner }} </h2>
+<p> Olá {{ owner }} </p>
 <p>
-  Welcome to the yardstick club, here's your getting started guide
+  Seu evento foi agendado com sucesso na Biblioteca Central da UFPA. Confira os dados de seu evento abaixo:
 </p>
+<strong>Título</strong>
+<p>{{title}}</p>
+<strong>Descrição</strong>
+<p>{{description}}</p>
+<strong>Data</strong>
+<p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
+<strong>Horário</strong>
+<p>{{schedules[0]}}h00 às {{schedules[schedules.length -1] + 1}}h00</p>
+<strong>Equipamentos</strong>
+<ul>
+  @each(equipment in equipments)
+    <li>
+      {{equipment}}
+    </li>
+  @endeach
+</ul>
+
+<br>
+<br>
+<center>
+
+  <b>Biblioteca Central da UFPA</b>
+  <p>Sistema de Agendamento de Auditório</p>
+  <img style="width: 80px;" src="cid:logo" />
+</center>
