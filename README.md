@@ -18,7 +18,6 @@ adonis new yardstick --api-only
 
 or manually clone the repo and then run `npm install`.
 
-
 ### Migrations
 
 Run the following command to run startup migrations.
@@ -27,16 +26,16 @@ Run the following command to run startup migrations.
 adonis migration:run
 ```
 
+# Docker
 
-# Docker 
-
-Run the following commands to run the database container in docker
+Run the following commands to start the database container in docker
 
 ## Up image
 
 ```bash
 docker-compose up
 ```
+
 ## Run container
 
 ```bash
