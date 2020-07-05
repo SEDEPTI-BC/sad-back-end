@@ -9,6 +9,7 @@ const Equipment = use('App/Models/Equipment')
 const Schedule = use('App/Models/Schedule')
 const Database = use('Database')
 const Mail = use('Mail')
+const Helpers = use('Helpers')
 
 /**
  * Resourceful controller for interacting with events
@@ -71,11 +72,15 @@ class EventController {
       })
     }
 
+    event.schedules = [...schedules]
+    event.equipments = [...equipments]
+
     await Mail.send('emails.createEvent', event.toJSON(), (message) => {
       message
         .to(event.email)
         .from('<from-email>')
-        .subject('<b>SAD-BC:</b> Agendamento de evento')
+        .subject('SAD-BC: Agendamento de evento')
+        .embed(Helpers.resourcesPath('images/sad-logo.png'), 'logo')
     })
 
     return response.status(201).json({
