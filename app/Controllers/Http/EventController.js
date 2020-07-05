@@ -8,6 +8,7 @@ const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
 const Schedule = use('App/Models/Schedule')
 const Database = use('Database')
+const Mail = use('Mail')
 
 /**
  * Resourceful controller for interacting with events
@@ -45,8 +46,7 @@ class EventController {
   }
 
   async store({ request, response }) {
-    const { equipments } = request.post()
-    const { schedules } = request.post()
+    const { equipments, schedules } = request.post()
     let event = null
 
     if (schedules) {
@@ -71,6 +71,13 @@ class EventController {
       })
     }
 
+    await Mail.send('emails.createEvent', event.toJSON(), (message) => {
+      message
+        .to(event.email)
+        .from('<from-email>')
+        .subject('<b>SAD-BC:</b> Agendamento de evento')
+    })
+
     return response.status(201).json({
       message: 'Evento criado com sucesso!',
       data: event,
@@ -78,8 +85,7 @@ class EventController {
   }
 
   async update({ params, request, response }) {
-    const { equipments } = request.post()
-    const { schedules } = request.post()
+    const { equipments, schedules } = request.post()
 
     const event = await Event.findOrFail(params.id)
 
