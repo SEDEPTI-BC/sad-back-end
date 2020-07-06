@@ -17,6 +17,7 @@
 const Route = use('Route')
 
 Route.group(() => {
+  Route.get('/users', 'AuthController.index').middleware('auth:jwt')
   Route.post('/register', 'AuthController.register').middleware('auth:jwt')
   Route.post('/login', 'AuthController.login')
   Route.get('/me', 'AuthController.me').middleware(['auth:jwt'])
