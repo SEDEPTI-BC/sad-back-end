@@ -1,0 +1,28 @@
+<div style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; background: linear-gradient(235.85deg, #f8f8f8 -12.83%, #dfdbdb 89.3%); margin: 0 auto; padding: 20px 30px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); text-align: justify; color: rgba(17, 17, 17, 0.849); font-size: 12pt">
+  <p> Olá {{ owner }} </p>
+  <p>
+    Seu evento foi agendado no auditório da Biblioteca Central da UFPA.
+    Confira as informações de seu evento:
+  </p>
+  <hr style="margin: 20px 0;"/>
+  <strong>Título</strong>
+  <p>{{title}}</p>
+  <strong>Descrição</strong>
+  <p>{{description}}</p>
+  <strong>Data</strong>
+  <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
+  <strong>Horário</strong>
+  <p>{{schedules[0]}}h00 às {{schedules[ schedules.length - 1 ] + 1}}h00</p>
+  <strong>Equipamentos</strong>
+  @each(equipment in equipments)
+    <p>
+      - {{equipment}}
+    </p>
+  @endeach
+  <hr style="margin: 20px 0;"/>
+  <div style="width: 80%; text-align: center; margin: 0 auto; margin-top: 40px;">
+    <b>Biblioteca Central da UFPA</b>
+    <p>Sistema de Agendamento de Auditório</p>
+    <img style="width: 80px;" src="cid:logo" />
+  </div>
+</div>

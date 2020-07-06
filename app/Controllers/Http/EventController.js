@@ -8,6 +8,8 @@ const Event = use('App/Models/Event')
 const Equipment = use('App/Models/Equipment')
 const Schedule = use('App/Models/Schedule')
 const Database = use('Database')
+const Mail = use('Mail')
+const Helpers = use('Helpers')
 
 /**
  * Resourceful controller for interacting with events
@@ -45,8 +47,8 @@ class EventController {
   }
 
   async store({ request, response }) {
-    const { equipments } = request.post()
-    const { schedules } = request.post()
+    const { equipments, schedules } = request.post()
+    let users = await Database.table('users')
     let event = null
 
     if (schedules) {
@@ -71,6 +73,27 @@ class EventController {
       })
     }
 
+    event.schedules = [...schedules]
+    event.equipments = [...equipments]
+
+    await Mail.send('emails.createEvent', event.toJSON(), (message) => {
+      message
+        .to(event.email)
+        .from('<from-email>')
+        .subject('SAD-BC: Agendamento de evento')
+        .embed(Helpers.resourcesPath('images/sad-logo.png'), 'logo')
+    })
+
+    users = users.map((user) => user.email)
+
+    await Mail.send('emails.createEventAdmin', event.toJSON(), (message) => {
+      message
+        .to(users)
+        .from('<from-email>')
+        .subject('SAD-BC: Agendamento de evento')
+        .embed(Helpers.resourcesPath('images/sad-logo.png'), 'logo')
+    })
+
     return response.status(201).json({
       message: 'Evento criado com sucesso!',
       data: event,
@@ -78,8 +101,7 @@ class EventController {
   }
 
   async update({ params, request, response }) {
-    const { equipments } = request.post()
-    const { schedules } = request.post()
+    const { equipments, schedules } = request.post()
 
     const event = await Event.findOrFail(params.id)
 
