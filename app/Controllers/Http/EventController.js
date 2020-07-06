@@ -48,6 +48,7 @@ class EventController {
 
   async store({ request, response }) {
     const { equipments, schedules } = request.post()
+    let users = await Database.table('users')
     let event = null
 
     if (schedules) {
@@ -78,6 +79,16 @@ class EventController {
     await Mail.send('emails.createEvent', event.toJSON(), (message) => {
       message
         .to(event.email)
+        .from('<from-email>')
+        .subject('SAD-BC: Agendamento de evento')
+        .embed(Helpers.resourcesPath('images/sad-logo.png'), 'logo')
+    })
+
+    users = users.map((user) => user.email)
+
+    await Mail.send('emails.createEventAdmin', event.toJSON(), (message) => {
+      message
+        .to(users)
         .from('<from-email>')
         .subject('SAD-BC: Agendamento de evento')
         .embed(Helpers.resourcesPath('images/sad-logo.png'), 'logo')

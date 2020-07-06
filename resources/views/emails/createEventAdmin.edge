@@ -1,12 +1,15 @@
-<p> Olá {{ owner }} </p>
 <p>
-  Seu evento foi agendado no auditório da Biblioteca Central da UFPA.
-  Confira as informações de seu evento:
+  Informamos que um evento foi agendado no auditório da Biblioteca Central.
+  Confira as informações do evento:
 </p>
 <strong>Título</strong>
 <p>{{title}}</p>
 <strong>Descrição</strong>
 <p>{{description}}</p>
+<strong>Dono</strong>
+<p>{{owner}}</p>
+<strong>Email</strong>
+<p>{{email}}</p>
 <strong>Data</strong>
 <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
 <strong>Horário</strong>
@@ -17,6 +20,11 @@
     - {{equipment}}
   </p>
 @endeach
+<br>
+<p style="font-size: 0.5rem">
+Vocês recebeu este email porque está cadastrado no SAD-BC.
+Para cancelar entre em contato com o SEDEPTI.
+</p>
 <br>
 <br>
 <center>
