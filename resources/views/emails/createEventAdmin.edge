@@ -16,7 +16,7 @@
   <strong>Data</strong>
   <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
   <strong>Horário</strong>
-  <p>{{schedules[0]}}h00 às {{schedules[ schedules.length - 1 ] + 1}}h00</p>
+  <p>{{Math.min(...schedules)}}h00 às {{Math.max(...schedules)}h00</p>
   <strong>Equipamentos</strong>
   @each(equipment in equipments)
     <p>
