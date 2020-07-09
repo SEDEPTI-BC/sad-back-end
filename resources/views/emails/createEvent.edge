@@ -13,12 +13,14 @@
   <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
   <strong>Horário</strong>
   <p>{{Math.min(...schedules)}}h00 às {{Math.max(...schedules)}h00</p>
-  <strong>Equipamentos</strong>
-  @each(equipment in equipments)
-    <p>
-      - {{equipment}}
-    </p>
-  @endeach
+  @if(equipments)
+    <strong>Equipamentos</strong>
+    @each(equipment in equipments)
+      <p>
+        - {{equipment}}
+      </p>
+    @endeach
+  @endif
   <hr style="margin: 20px 0;"/>
   <div style="width: 80%; text-align: center; margin: 0 auto; margin-top: 40px;">
     <b>Biblioteca Central da UFPA</b>
