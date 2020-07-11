@@ -13,7 +13,7 @@
   <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
   <strong>Horário</strong>
   <p>{{schedules[0]}}h00 às {{schedules[ schedules.length - 1 ]}}h00</p>
-  @if(equipments)
+  @if(equipments.length > 0)
     <strong>Equipamentos</strong>
     @each(equipment in equipments)
       <p>
