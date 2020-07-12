@@ -12,13 +12,15 @@
   <strong>Data</strong>
   <p>{{date.split(' ')[0].split('-').reverse().join('/')}}</p>
   <strong>Horário</strong>
-  <p>{{schedules[0]}}h00 às {{schedules[ schedules.length - 1 ] + 1}}h00</p>
-  <strong>Equipamentos</strong>
-  @each(equipment in equipments)
-    <p>
-      - {{equipment}}
-    </p>
-  @endeach
+  <p>{{schedules[0]}}h00 às {{schedules[ schedules.length - 1 ]}}h00</p>
+  @if(equipments.length > 0)
+    <strong>Equipamentos</strong>
+    @each(equipment in equipments)
+      <p>
+        - {{equipment}}
+      </p>
+    @endeach
+  @endif
   <hr style="margin: 20px 0;"/>
   <div style="width: 80%; text-align: center; margin: 0 auto; margin-top: 40px;">
     <b>Biblioteca Central da UFPA</b>
