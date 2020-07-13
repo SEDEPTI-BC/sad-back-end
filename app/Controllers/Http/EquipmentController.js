@@ -10,7 +10,9 @@ class EquipmentController {
   async index({ request, response }) {
     let { page } = request.all()
     page = page ? page : 1
-    const equipments = await Equipment.query().paginate(page ? page : 1, 10)
+    const equipments = await Equipment.query()
+      .orderBy('name', 'asc')
+      .paginate(page ? page : 1, 10)
     return response.json({ equipments })
   }
 
