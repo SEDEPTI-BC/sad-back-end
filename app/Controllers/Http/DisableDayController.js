@@ -9,9 +9,31 @@ const Database = use('Database')
 
 class DisableDayController {
   async index({ request, response }) {
-    let { page } = request.all()
-    page = page ? page : 1
-    const disable_days = await DisableDay.query().paginate(page ? page : 1, 10)
+    let { all, limit, order, page } = request.all()
+
+    let today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth() + 1
+    const day = today.getDate()
+    today = `${year}-${month}-${day}`
+
+    let disable_days = DisableDay
+
+    if (all) {
+      disable_days = await disable_days
+        .query()
+        .orderBy('title', order ?? 'asc')
+        .with('schedules')
+        .paginate(page ?? 1, limit ?? 10)
+    } else {
+      disable_days = await disable_days
+        .query()
+        .where('date', '>=', today)
+        .orderBy('date', order ?? 'asc')
+        .with('schedules')
+        .paginate(page ?? 1, limit ?? 10)
+    }
+
     return response.status(200).json({ disable_days })
   }
 
