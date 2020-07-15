@@ -32,7 +32,7 @@ class EventController {
         .orderBy('date', order ? order : 'desc')
         .with('equipments')
         .with('schedules')
-        .paginate(page ? page : 1, limit ? limit : 10)
+        .paginate(page ?? 1, limit ?? 10)
     } else {
       events = await events
         .query()
@@ -40,7 +40,7 @@ class EventController {
         .orderBy('date', order ? order : 'desc')
         .with('equipments')
         .with('schedules')
-        .paginate(page ? page : 1, limit ? limit : 10)
+        .paginate(page ?? 1, limit ?? 10)
     }
 
     return response.json({ events })
