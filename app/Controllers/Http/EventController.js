@@ -29,7 +29,7 @@ class EventController {
     if (all) {
       events = await events
         .query()
-        .orderBy('date', order ? order : 'desc')
+        .orderBy('date', order ?? 'desc')
         .with('equipments')
         .with('schedules')
         .paginate(page ?? 1, limit ?? 10)
@@ -37,7 +37,7 @@ class EventController {
       events = await events
         .query()
         .where('date', '>=', today)
-        .orderBy('date', order ? order : 'desc')
+        .orderBy('date', order ?? 'desc')
         .with('equipments')
         .with('schedules')
         .paginate(page ?? 1, limit ?? 10)
