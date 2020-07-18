@@ -30,9 +30,10 @@ Route.group(() => {
   Route.get('/equipments', 'EquipmentController.index')
 
   Route.resource('events', 'EventController')
-    .only(['index', 'store', 'destroy', 'update'])
+    .only(['index', 'destroy', 'update'])
     .middleware('auth:jwt')
   Route.get('/events_current_month', 'EventController.currentMonth')
+  Route.post('/events', 'EventController.store')
 
   Route.resource('disable_days', 'DisableDayController')
     .only(['store', 'destroy', 'update'])
