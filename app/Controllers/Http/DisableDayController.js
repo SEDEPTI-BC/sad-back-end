@@ -49,7 +49,16 @@ class DisableDayController {
 
     if (!disableDays.full_day) {
       if (schedules) {
-        schedules.forEach(async (selected) => {
+        const min = Math.min(...schedules)
+        const max = Math.max(...schedules)
+
+        let betweenSchedules = []
+
+        for (let i = min; i <= max; i++) {
+          betweenSchedules.push(i)
+        }
+
+        betweenSchedules.forEach(async (selected) => {
           const schedule = await Schedule.findBy('hour', selected)
           await disableDays.schedules().attach([schedule.id])
         })
@@ -73,7 +82,16 @@ class DisableDayController {
 
     if (!disableDays.full_day) {
       if (schedules) {
-        schedules.forEach(async (selected) => {
+        const min = Math.min(...schedules)
+        const max = Math.max(...schedules)
+
+        let betweenSchedules = []
+
+        for (let i = min; i <= max; i++) {
+          betweenSchedules.push(i)
+        }
+
+        betweenSchedules.forEach(async (selected) => {
           const schedule = await Schedule.findBy('hour', selected)
           await disableDays.schedules().attach([schedule.id])
         })
