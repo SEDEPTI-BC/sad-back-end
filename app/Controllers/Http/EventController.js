@@ -50,13 +50,21 @@ class EventController {
     const { equipments, schedules } = request.post()
     let users = await Database.table('users')
     let event = null
+    let betweenSchedules = []
 
     if (schedules) {
       event = await Event.create({
         ...request.only(['owner', 'email', 'title', 'description', 'date']),
       })
 
-      schedules.forEach(async (selected) => {
+      const min = Math.min(...schedules)
+      const max = Math.max(...schedules)
+
+      for (let i = min; i <= max; i++) {
+        betweenSchedules.push(i)
+      }
+
+      betweenSchedules.forEach(async (selected) => {
         const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
@@ -73,7 +81,7 @@ class EventController {
       })
     }
 
-    event.schedules = [...schedules]
+    event.schedules = [...betweenSchedules]
     event.equipments = [...equipments]
 
     await Mail.send('emails.createEvent', event.toJSON(), (message) => {
@@ -102,7 +110,7 @@ class EventController {
 
   async update({ params, request, response }) {
     const { equipments, schedules } = request.post()
-
+    let betweenSchedules = []
     const event = await Event.findOrFail(params.id)
 
     await event.merge(
@@ -118,8 +126,15 @@ class EventController {
     }
 
     if (schedules) {
+      const min = Math.min(...schedules)
+      const max = Math.max(...schedules)
+
+      for (let i = min; i <= max; i++) {
+        betweenSchedules.push(i)
+      }
+
       await event.schedules().detach()
-      schedules.forEach(async (selected) => {
+      betweenSchedules.forEach(async (selected) => {
         const schedule = await Schedule.findBy('hour', selected)
         await event.schedules().attach([schedule.id])
       })
