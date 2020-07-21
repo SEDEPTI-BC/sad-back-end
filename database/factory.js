@@ -33,9 +33,12 @@ Factory.blueprint('App/Models/Event', (faker) => {
   const day = Math.random() * (27 - 1) + 1
   const date = new Date(thisYear, month, day)
 
+  const owner = faker.name({ nationality: 'it' })
+  const email = name.split(' ').join('.') + 'email.com'
+
   return {
-    owner: faker.name({ nationality: 'it' }),
-    email: faker.email({ domain: 'gmail.com' }),
+    owner,
+    email,
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
     date,
