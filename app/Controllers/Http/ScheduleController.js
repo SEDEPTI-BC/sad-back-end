@@ -70,14 +70,28 @@ class ScheduleController {
       disabledDays = disabledDays.concat(schedules)
     }
 
-    disabledDays = disabledDays.map((schedule) => schedule.id)
+    const disabledDaysIds = disabledDays.map((schedule) => schedule.id)
 
-    const availableSchedules = await Database.table('schedules')
-      .whereNotIn('id', disabledDays)
+    let availableSchedules = await Database.table('schedules')
+      .whereNotIn('id', disabledDaysIds)
       .orderBy('hour', 'asc')
 
+    disabledDays = disabledDays.map((schedule) => ({
+      ...schedule,
+      available: false,
+    }))
+
+    availableSchedules = availableSchedules.map((schedule) => ({
+      ...schedule,
+      available: true,
+    }))
+
+    const schedules = []
+      .concat(disabledDays, availableSchedules)
+      .sort((a, b) => a.hour - b.hour)
+
     return response.json({
-      schedules: availableSchedules,
+      schedules,
     })
   }
 }
