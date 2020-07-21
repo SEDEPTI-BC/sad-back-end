@@ -17,7 +17,7 @@ const Equipment = use('App/Models/Equipment')
 
 Factory.blueprint('App/Models/User', (faker) => {
   const username = faker.name({ nationality: 'it' })
-  const email = username.split(' ').join('.') + '@email.com'
+  const email = username.toLowerCase().split(' ').join('.') + '@email.com'
 
   return {
     username,
@@ -34,7 +34,7 @@ Factory.blueprint('App/Models/Event', (faker) => {
   const date = new Date(thisYear, month, day)
 
   const owner = faker.name({ nationality: 'it' })
-  const email = owner.split(' ').join('.') + '@email.com'
+  const email = owner.toLowerCase().split(' ').join('.') + '@email.com'
 
   return {
     owner,
