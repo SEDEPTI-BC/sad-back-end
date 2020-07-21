@@ -16,9 +16,12 @@ const Factory = use('Factory')
 const Equipment = use('App/Models/Equipment')
 
 Factory.blueprint('App/Models/User', (faker) => {
+  const username = faker.name({ nationality: 'it' })
+  const email = name.split(' ').join('.') + 'email.com'
+
   return {
-    username: faker.name({ nationality: 'it' }),
-    email: faker.email(),
+    username,
+    email,
     password: '123456',
   }
 })
