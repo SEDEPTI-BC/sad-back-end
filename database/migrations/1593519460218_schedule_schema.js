@@ -8,6 +8,7 @@ class ScheduleSchema extends Schema {
     this.create('schedules', (table) => {
       table.increments()
       table.integer('hour').notNullable()
+      table.boolean('available').defaultTo(true)
       table.timestamps()
     })
   }
