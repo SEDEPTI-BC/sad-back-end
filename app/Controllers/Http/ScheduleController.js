@@ -17,14 +17,14 @@ class ScheduleController {
 
   async store({ request, response }) {
     const schedule = await Schedule.create({
-      ...request.only(['hour', 'available']),
+      ...request.only(['hour']),
     })
     return response.status(201).json({ schedule })
   }
 
   async update({ params, request, response }) {
     const schedule = await Schedule.findOrFail(params.id)
-    schedule.merge(request.only(['hour', 'available']))
+    schedule.merge(request.only(['hour']))
     schedule.save()
     return response.json({ schedule })
   }
