@@ -16,9 +16,12 @@ const Factory = use('Factory')
 const Equipment = use('App/Models/Equipment')
 
 Factory.blueprint('App/Models/User', (faker) => {
+  const username = faker.name({ nationality: 'it' })
+  const email = username.toLowerCase().split(' ').join('.') + '@email.com'
+
   return {
-    username: faker.name({ nationality: 'it' }),
-    email: faker.email(),
+    username,
+    email,
     password: '123456',
   }
 })
@@ -30,9 +33,12 @@ Factory.blueprint('App/Models/Event', (faker) => {
   const day = Math.random() * (27 - 1) + 1
   const date = new Date(thisYear, month, day)
 
+  const owner = faker.name({ nationality: 'it' })
+  const email = owner.toLowerCase().split(' ').join('.') + '@email.com'
+
   return {
-    owner: faker.name({ nationality: 'it' }),
-    email: faker.email({ domain: 'gmail.com' }),
+    owner,
+    email,
     title: faker.word(),
     description: faker.sentence({ words: 10 }),
     date,

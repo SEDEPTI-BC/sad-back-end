@@ -16,7 +16,9 @@ class ScheduleController {
   }
 
   async store({ request, response }) {
-    const schedule = await Schedule.create({ ...request.only(['hour']) })
+    const schedule = await Schedule.create({
+      ...request.only(['hour']),
+    })
     return response.status(201).json({ schedule })
   }
 
@@ -27,7 +29,7 @@ class ScheduleController {
     return response.json({ schedule })
   }
 
-  async destroy({ params, request, response }) {
+  async destroy({ params, response }) {
     const schedule = await Schedule.findOrFail(params.id)
     await schedule.delete()
     return response.json({
@@ -68,14 +70,28 @@ class ScheduleController {
       disabledDays = disabledDays.concat(schedules)
     }
 
-    disabledDays = disabledDays.map((schedule) => schedule.id)
+    const disabledDaysIds = disabledDays.map((schedule) => schedule.id)
 
-    const availableSchedules = await Database.table('schedules')
-      .whereNotIn('id', disabledDays)
+    let availableSchedules = await Database.table('schedules')
+      .whereNotIn('id', disabledDaysIds)
       .orderBy('hour', 'asc')
 
+    disabledDays = disabledDays.map((schedule) => ({
+      ...schedule,
+      available: false,
+    }))
+
+    availableSchedules = availableSchedules.map((schedule) => ({
+      ...schedule,
+      available: true,
+    }))
+
+    const schedules = []
+      .concat(disabledDays, availableSchedules)
+      .sort((a, b) => a.hour - b.hour)
+
     return response.json({
-      schedules: availableSchedules,
+      schedules,
     })
   }
 }
