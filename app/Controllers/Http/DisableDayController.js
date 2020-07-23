@@ -78,7 +78,9 @@ class DisableDayController {
   async update({ params, request, response }) {
     const { schedules } = request.post()
     const disableDays = await DisableDay.findOrFail(params.id)
-    disableDays.merge(request.all())
+    disableDays.merge({
+      ...request.only(['date', 'title', 'description', 'full_day']),
+    })
 
     if (!disableDays.full_day) {
       if (schedules) {
