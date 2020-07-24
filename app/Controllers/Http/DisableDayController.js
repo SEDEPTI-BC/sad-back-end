@@ -93,6 +93,8 @@ class DisableDayController {
           betweenSchedules.push(i)
         }
 
+        await disableDays.schedules().detach()
+
         betweenSchedules.forEach(async (selected) => {
           const schedule = await Schedule.findBy('hour', selected)
           await disableDays.schedules().attach([schedule.id])
